@@ -1,0 +1,42 @@
+.clock-container {
+
+    border: 2px dashed red;
+
+
+  }
+
+.time-display {
+
+}
+
+.date-display {
+
+}
+
+/* CSS for the timezone boxes */
+
+.timezone-container {
+  font-family: "Rec Mono Duotone", monospace;
+}
+
+.timezone-pair {
+  flex-direction: row;
+
+}
+
+
+.timezone-name {
+/*  font-weight: bold;*/
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.timezone-time {
+  text-align: center;
+}
+
+
+
+
+
+
