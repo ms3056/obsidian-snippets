@@ -1,0 +1,144 @@
+/* Color the line number for the active line */
+/*.cm-active.cm-line {
+  color:  var(--color-accent) !important;
+}*/
+
+/* The font is a mono font */
+/*.cm-lineNumbers .cm-gutterElement {
+  font-family: "Rec Mono Duotone";
+  font-feature-settings: "zero" !important;
+  color: var(--color-accent) !important;
+  font-size: 1.3em;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  padding-right: 6px !important;
+}*/
+
+/* Highlight gutter number */
+/*.cm-lineNumbers .cm-gutterElement.cm-active {
+  border-right: 3px solid var(--interactive-accent);
+  font-weight: bold !important;
+  filter: hue-rotate(65deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}*/
+
+/* Active line formatting */
+/*.cm-active.cm-line {
+  color:  var(--ctp-accent) !important;
+  filter: brightness(1.2) !important;
+}*/
+
+/* Active line number formatting */
+/*.cm-lineNumbers .cm-gutterElement.cm-active {
+  font-family: "Rec Mono Duotone";
+  font-feature-settings: "zero" !important;
+  border-right: 3px solid var(--interactive-accent);
+  padding-right: 9px;
+  margin-left: -6px;
+  font-weight: bold !important;
+  filter: brightness(1.2);
+}*/
+
+/* Line numbers formatting */
+/*.cm-lineNumbers .cm-gutterElement {
+  border-right: 9px solid transparent;
+  display: flex;
+  justify-content: right;
+  align-items: top;
+  font-size: 1.1em;
+}*/
+
+/*.cm-lineNumbers .cm-gutterElement {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Rec Mono Duotone";
+  font-feature-settings: "zero" !important;
+  font-size: 1.1em;
+  filter: brightness(1.2);
+  border-radius: 50%;
+  width: 28px; 
+  height: 28px;
+  box-sizing: border-box;
+}*/
+
+
+/*.cm-lineNumbers .cm-gutterElement.cm-active {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Rec Mono Duotone";
+  font-feature-settings: "zero" !important;
+  font-weight: bold !important;
+  font-size: 1.1em;
+  filter: brightness(1.2);
+  border-radius: 50%;
+  width: 100%; 
+  height: 100%;
+  border: 2px solid var(--interactive-accent);
+  box-sizing: border-box;
+}*/
+
+.markdown-source-view.mod-cm6.is-live-preview div.cm-editor div {
+  caret-color: var(--color-accent);
+/*  padding-top: 1px;*/
+}
+
+
+/* Active line formatting */
+.cm-active.cm-line {
+  filter: brightness(1.2) !important;
+}
+
+.cm-line.cm-active {
+  background-color: rgba(var(--ctp-accent),0.05);
+  margin-top: 10px;
+}
+
+
+.cm-gutter {
+  overflow: visible !important;
+  font-size: 1.2em;
+}
+
+.cm-gutterElement {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  font-family: "Rec Mono Duotone";
+  font-feature-settings: "zero" !important;
+
+}
+
+.cm-gutterElement.cm-active {
+  position: relative;
+
+}
+
+.cm-gutterElement.cm-active::after {
+  content: '';
+  position: absolute;
+  left: 0px;
+  right: -2px;
+  aspect-ratio: 1/1;
+/*  circle version */
+/*  border: 2px solid rgba(var(--ctp-accent), 0.5);*/
+/*  border-radius: 100%;*/
+/*  transform: translate(0, -1px);*/
+
+/*  line at the right version */
+  border-right: 3px solid var(--color-accent);
+  transform: translate(5px, -1px);
+  opacity: 0.5;
+  
+}
+
+
+
+
+

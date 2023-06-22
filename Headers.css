@@ -1,0 +1,27 @@
+/*.theme-dark {
+    --my-color: rgba(var(--ctp-accent), 0.5);
+}*/
+
+
+h1,
+.cm-header-1 {
+/*  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(90deg, var(--color-accent), var(--my-color));*/
+/*  font-family: "Meiryo";*/
+  text-shadow: 2px 2px 2px black;
+/*  filter: hue-rotate(90deg) brightness(90%);*/
+/*  margin-bottom: -10px !important;*/
+}
+
+h2,
+.cm-header-2 {
+/*  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(90deg, var(--color-accent), var(--my-color));*/
+/*  font-family: "Meiryo";*/
+  text-shadow: 2px 2px 2px black;
+/*  filter: hue-rotate(90deg) brightness(90%);*/
+}

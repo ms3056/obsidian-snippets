@@ -1,0 +1,111 @@
+.inline-title {
+    color: var(--color-accent);
+    opacity: 70%;
+    margin-left: 30px;
+    text-shadow: 2px 2px 2px black;
+}
+
+
+
+/* Change font of code blocks */
+.cm-s-obsidian .HyperMD-codeblock {
+    font-family: "Rec Mono Duotone", monospace;
+    font-feature-settings: "zero", "liga" 1, "ss12" 1, "ss01" 1, "pnum" 1 !important;
+}
+
+/* Change font and color of italic text */
+em, .cm-em {
+    font-family: "Recursive Sans Casual Static", serif !important;
+    font-feature-settings: "zero", "liga" 1, "dlig" 1, "ss12" 1, "ss01" 0, "pnum" 1, "ss04" 1, "ss03" 1 !important;
+    font-style: italic;
+}
+
+strong, .cm-strong {
+    font-family: "Recursive Sans Casual Static", serif !important;
+    font-feature-settings: "zero", "liga" 1, "dlig" 1, "ss12" 1, "ss01" 0, "pnum" 1, "ss04" 1, "ss03" 1 !important;
+    font-size: 1.05em;
+}
+
+/* --- change font in Live Preview editing --- */
+.markdown-preview-view, .cm-s-obsidian {
+    font-family: "Recursive Sans Casual Static", serif !important;
+    font-feature-settings: "zero", "liga" 1, "dlig" 1, "ss12" 1, "ss01" 0, "pnum" 1, "ss04" 1, "ss03" 1 !important;
+}
+
+
+/* Bookmarks */
+
+.bookmark {
+  font-size: 1.05em;
+  color: var(--color-accent);
+  opacity: 0.8;
+/*  filter: hue-rotate(45deg);*/
+}
+
+/* OZ Calendar Recent Files */
+
+.oz-calendar-note-line {
+    font-size: 1.1em;
+    color: var(--color-accent);
+    font-family: "Rec Mono Duotone", monospace;
+    font-feature-settings: "zero", "liga" 1, "ss12" 1, "ss01" 1, "pnum" 1 !important;
+    opacity: 0.8;
+}
+
+.oz-calendar-plugin-view button.react-calendar__tile.react-calendar__month-view__days__day, .oz-calendar-plugin-view button.react-calendar__navigation__arrow, .oz-calendar-plugin-view button.react-calendar__navigation__label {
+    font-family: "Rec Mono Duotone", monospace;
+    font-feature-settings: "zero", "liga" 1, "ss12" 1, "ss01" 1, "pnum" 1 !important;
+}
+
+.oz-calendar-plugin-view .react-calendar__month-view__weekdays__weekday {
+    font-family: "Rec Mono Duotone", monospace;
+    font-feature-settings: "zero", "liga" 1, "ss12" 1, "ss01" 1, "pnum" 1 !important;
+    font-size: 1.2em !important;
+    color: var(--color-accent);
+    opacity: 0.8;
+    font-weight: normal;
+}
+
+
+/* Dataview Lists and Tables */
+
+.block-language-dataview li {
+    /* style to your heart's content */
+    font-family: "Rec Mono Duotone", monospace !important;
+    font-feature-settings: "zero", "liga" 1, "ss12" 1, "ss01" 1, "pnum" 1 !important;
+    font-size: 1.1em !important;
+    margin-right: 30px; /* add spacing between items */
+}
+
+.dataview.list-view-ul {
+    list-style: none !important; 
+    display: flex; 
+    flex-wrap: wrap; 
+}
+
+div.dataview-error-box {
+    visibility: hidden;
+}
+
+div.dataview-error-box::before {
+    visibility: visible;
+    content: "Nothing to see here...";
+    font-style: italic;
+    position: absolute;
+    font-size: 2em;
+    background: linear-gradient(to bottom right, #B2DCEA, #8FC9DF, #6CB7D4, #4994AF, #276B89, #0F3C5D);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+}
+
+.block-language-dataview:has(td) {
+    /* style to your heart's content */
+    font-family: "Rec Mono Duotone", monospace !important;
+    font-feature-settings: "zero", "liga" 1, "ss12" 1, "ss01" 1, "pnum" 1 !important;
+    font-size: 0.9em !important;
+}
+
+

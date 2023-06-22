@@ -1,0 +1,164 @@
+/* Floating Thingy */
+/*.is-selected.svelte-ilz3jn .timeline-day.svelte-ilz3jn {
+    border-style: solid;
+    border-color: var(--color-accent);
+    border-radius: 8px;
+    line-height: 1.8em;
+    font-weight: bolder !important;
+    font-size: 1.4em;
+}*/
+
+/* Today's Day */
+/*.is-selected.svelte-ilz3jn .timeline-day-of-week.svelte-ilz3jn {
+    font-weight: bolder;
+    font-size: 1.6em !important;
+    margin-top: -12px !important;
+}*/
+
+/*.leaf-periodic-button.svelte-ilz3jn.svelte-ilz3jn {
+    padding: 6px 2px 2px 2px !important;
+    margin-top: 30px;
+}*/
+
+#calendar-container .day {
+/*    font-family: "Rec Mono Duotone";*/
+/*    font-feature-settings: "zero" !important;*/
+    width: 1.2em;
+    height:1.2em;
+/*    box-sizing: initial;*/
+
+/*    color: var(--color-accent);*/
+    text-align: center;
+   
+/*    line-height: 1.3em;*/
+    box-sizing: content-box; 
+    margin-left: 5px;
+    margin-bottom: 8px;
+
+}
+
+.calendar {
+    font-size: 1.2em !important;
+}
+
+#calendar-container div.week-num {
+    font-size: 0.7em !important;
+    color: rgba(white, 0.5) !important;
+    border-radius: 50%;
+    width: 1.2em;
+    height:1.2em;
+    box-sizing: initial; 
+    text-align: center;
+
+    line-height: 1.3em;
+    box-sizing: content-box; 
+    margin-left: 4px;
+    margin-bottom: 8px;
+
+    
+    font-weight: normal;
+
+    line-height: 1.3em;
+    box-sizing: content-box; 
+}
+
+/* remove a dash the appears when you click into another month */
+/*#calendar-container .right-nav .reset-button::after {
+    content:"" !important;
+}*/
+
+/* change weekday headers to Japanese font */
+#calendar-container th {
+    font-family: "Meiryo";
+    font-size: 1.0em !important;
+    width: 1.2em;
+    height:1.2em;
+    box-sizing: initial;
+    color: var(--color-accent);
+    text-align: center;
+    line-height: 1.3em;
+    box-sizing: content-box; 
+    text-shadow: 2px 2px 2px var(--background-primary-alt);
+}
+
+.calendar {
+    font-family: "Rec Mono Duotone";
+    font-feature-settings: "zero" !important;
+    width: 1.2em;
+    height:1.2em;
+    box-sizing: initial;
+
+    color: var(--color-accent);
+    text-align: center;
+   
+    line-height: 1.3em;
+    box-sizing: content-box; 
+    margin-left: 4px;
+    margin-bottom: 8px;
+}
+
+/* alignment and color for days with notes */
+.calendar .day.has-note {
+    width: 1.2em;
+    height:1.2em;
+    box-sizing: initial;
+    
+    border: 0.1em solid var(--color-accent);
+    text-align: center;
+    border-radius: 50%;    
+    
+    line-height: 1.3em;
+    box-sizing: content-box; 
+    margin-left: 4px;
+    margin-bottom: 8px;
+}
+
+/* change color and alignment of today */
+.calendar .day.today {
+    width: 1.2em;
+    height:1.2em;
+    box-sizing: initial;
+    border: 2px solid white;
+    border-radius: 50%;
+    font-weight: normal;
+/*    background-color: rgba(255,255,0, 0.2) !important;*/
+/*    color: white !important;*/
+    margin-left: 4px;
+    margin-bottom: 8px;
+
+    line-height: 1.3em;
+    box-sizing: content-box; 
+}
+
+/* change color of active day */
+.calendar .day.active {
+/*    color: var(--ctp-accent) !important*/
+/*    filter: brightness(1.4); !important;*/
+}
+
+/* remove underline for active day */
+/*.calendar .day.active::after {
+    content: "";
+
+}*/
+
+/* change underline color for TODAY */
+.calendar .today::after {
+    content: "\2796" !important;
+    color: transparent;
+    text-align: center;
+    box-sizing: content-box; 
+    margin-left: -1px;
+    text-shadow: 0 0 0 var(--color-accent);
+}
+
+.calendar .day .dot-container {
+    display: none;
+}
+
+#calendar-container {
+  --color-background-weekend: rgba(var(--ctp-accent), 0.20);
+  --color-text-weeknum: white !important;
+
+}
+

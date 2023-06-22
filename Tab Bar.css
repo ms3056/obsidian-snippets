@@ -1,0 +1,4 @@
+div.view-actions {
+    color: var(--color-accent) !important;
+    --icon-size: 22px;
+}

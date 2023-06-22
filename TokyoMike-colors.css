@@ -1,0 +1,282 @@
+@charset "UTF-8";
+/* @settings
+name: TokyoMike-My Colors
+id: tokyomike-my-colors
+settings:
+    - 
+        id: TokyoMike-colors
+        title: Theme accent
+        description: Select your preferred accent
+        type: class-select
+        allowEmpty: false
+        default: ctp-accent-slime
+        options:
+            -   
+                label: Alice Blue
+                value: ctp-accent-aliceblue
+            -   
+                label: Cement
+                value: ctp-accent-cement
+            -   
+                label: Chocolate
+                value: ctp-accent-chocolate
+            -   
+                label: Cinnabar
+                value: ctp-accent-cinnabar
+            -   
+                label: Coral Blue
+                value: ctp-accent-coralblue
+            -
+                label: Confetti
+                value: ctp-accent-confetti
+            -
+                label: Cornflower
+                value: ctp-accent-cornflower
+            -
+                label: Denim
+                value: ctp-accent-denim
+            -   
+                label: Emerald
+                value: ctp-accent-emerald
+            -   
+                label: Goldenrod
+                value: ctp-accent-goldenrod
+            -
+                label: Light Steel Blue
+                value: ctp-accent-lightsteelblue
+            -   
+                label: Lilac
+                value: ctp-accent-lilac
+            -   
+                label: Maize
+                value: ctp-accent-maize
+            -   
+                label: Neon Blue
+                value: ctp-accent-neonblue
+            -
+                label: Mint Blue
+                value: ctp-accent-mint-blue
+            -   
+                label: Orchid
+                value: ctp-accent-orchid
+            -   
+                label: Rebecca Purple
+                value: ctp-accent-rebeccapurple
+            -   
+                label: Slate
+                value: ctp-accent-slategray
+            -   
+                label: Slime
+                value: ctp-accent-slime
+            -   
+                label: Steel
+                value: ctp-accent-steelblue
+            -   
+                label: Tapestry
+                value: ctp-accent-tapestry
+            -   
+                label: Tomato
+                value: ctp-accent-tomato
+            -   
+                label: Trinidad
+                value: ctp-accent-trinidad
+            -   
+                label: Yellow Green
+                value: ctp-accent-yellowgreen
+*/        
+/*------------------Selecting Accents-------------------*/
+.style-settings-heading[data-id=tokyomike-my-colors] .setting-item-name, .style-settings-heading[data-id=tokyomike-colors] .setting-item-name {
+    color: var(--color-accent);
+}
+
+.setting-item:is([data-id=tokyomike-my-colors]) > .setting-item-info > .setting-item-name > .style-settings-collapse-indicator::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08'%3E%3C/path%3E%3Cpath d='M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.setting-item:is([data-id*=tokyomike-my-colors]) > .setting-item-info > .setting-item-name {
+  margin-left: -3px;
+}
+.setting-item:is([data-id*=tokyomike-my-colors]) > .setting-item-info > .setting-item-name > .style-settings-collapse-indicator {
+  margin-right: 4px;
+}
+.setting-item:is([data-id*=tokyomike-my-colors]) > .setting-item-info > .setting-item-name > .style-settings-collapse-indicator::after {
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  background-color: var(--color-accent);
+  content: " ";
+  display: inline-flex;
+  flex-shrink: 0;
+  height: calc(var(--font-ui-medium) + 3px);
+  width: calc(var(--font-ui-medium) + 3px);
+  margin-left: calc(-0.5 * var(--size-4-1));
+  margin-right: calc(var(--size-4-2) - 3px);
+  transition: transform 0.1s;
+  vertical-align: text-top;
+  margin-right: 0;
+}
+.setting-item:is([data-id*=tokyomike-my-colors]) > .setting-item-info > .setting-item-name > .style-settings-collapse-indicator > svg {
+  display: none;
+}
+
+.setting-item:is([data-id=tokyomike-my-colors],
+[data-id=tokyomike-my-colors]):not(.is-collapsed) > .setting-item-info > .setting-item-name > .style-settings-collapse-indicator::after {
+  transform: rotate(90deg);
+  transition: transform 0.1s;
+}
+
+.theme-dark.anp-theme-ext-dark { 
+    --ctp-confetti: 212, 206, 77;
+    /* rgb(212, 206, 77) */
+    --ctp-maize: 255, 203, 5;
+    /* rgb(255, 203, 5) */
+    --ctp-goldenrod: 178, 128, 7;
+    /* rgb(178, 128, 7) */
+    --ctp-emerald: 80, 200, 120;
+    /* rgb(80, 200, 120) */
+    --ctp-yellowgreen: 154, 205, 50;
+    /* rgb(154, 205, 50) */
+    --ctp-slime: 101,255,0;
+    /* rgb(101,255,0) */
+    --ctp-aliceblue: 240, 248, 255;
+    /* rgb(240, 248, 255) */
+    --ctp-coralblue: 205, 225, 244;
+    /* rgb(205, 225, 244) */
+    --ctp-lightsteelblue: 176, 196, 222;
+    /* rgb(176, 196, 222) */
+    --ctp-neonblue: 21,137,255; 
+    --ctp-mint-blue: 141, 216, 222;
+    /* rgb(141, 216, 222) */
+    /* rgb(21,137,255) */
+    --ctp-steelblue: 70, 130, 180;
+    /* rgb(70, 130, 180) */
+    --ctp-cornflower: 100, 149, 237;
+    /* rgb(100, 149, 237) */
+    --ctp-denim: 22, 96, 178;
+    /* rgb(22, 96, 178) */
+    --ctp-slategray: 112, 128, 144;
+    /* rgb(112, 128, 144) */
+    --ctp-cement: 123, 139, 136;
+    /* rgb(123, 139, 136) */
+    --ctp-lilac: 200, 162, 200;
+    /* rgb(200, 162, 200) */
+    --ctp-orchid:218, 112, 214;
+    /* rgb(218, 112, 214) */
+    --ctp-rebeccapurple: 102, 51, 153;
+    /* rgb(102, 51, 153) */
+    --ctp-tapestry: 189, 113, 130;
+    /* rgb(189, 113, 130) */
+    --ctp-chocolate: 210, 105, 30;
+    /* rgb(210, 105, 30) */
+    --ctp-trinidad: 204, 79, 38;
+    /* rgb(204, 79, 38) */
+    --ctp-cinnabar: 213, 67, 56;
+    /* rgb(213, 67, 56) */
+    --ctp-tomato: 255, 99, 71;
+    /* rgb(255, 99, 71) */
+
+    /* these are some minor colors/settings to change hacking deep into the theme */   
+/*    --ctp-surface0: var(--ctp-accent); 
+    --interactive-normal: rgba(var(--ctp-accent), 0.3);
+    --background-modifier-border: rgba(var(--ctp-accent), 0.5);
+    --divider-color: rgba(var(--ctp-accent), 0.3);
+    --checkbox-border-color: var(--color-accent);
+    --checkbox-size: 14px;*/
+
+
+ }
+
+.anuppuccin-accent-toggle.ctp-accent-slime {
+  --ctp-accent: var(--ctp-slime) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-neonblue {
+  --ctp-accent: var(--ctp-neonblue) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-coralblue {
+  --ctp-accent: var(--ctp-coralblue) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-goldenrod {
+  --ctp-accent: var(--ctp-goldenrod) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-cement {
+  --ctp-accent: var(--ctp-cement) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-tapestry {
+  --ctp-accent: var(--ctp-tapestry) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-confetti {
+  --ctp-accent: var(--ctp-confetti) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-cinnabar {
+  --ctp-accent: var(--ctp-cinnabar) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-denim {
+  --ctp-accent: var(--ctp-denim) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-trinidad {
+  --ctp-accent: var(--ctp-trinidad) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-emerald {
+  --ctp-accent: var(--ctp-emerald) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-cornflower {
+  --ctp-accent: var(--ctp-cornflower) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-lilac {
+  --ctp-accent: var(--ctp-lilac) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-steelblue {
+  --ctp-accent: var(--ctp-steelblue) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-slategray {
+  --ctp-accent: var(--ctp-slategray) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-chocolate {
+  --ctp-accent: var(--ctp-chocolate) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-tomato {
+  --ctp-accent: var(--ctp-tomato) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-orchid {
+  --ctp-accent: var(--ctp-orchid) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-rebeccapurple {
+  --ctp-accent: var(--ctp-rebeccapurple) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-yellowgreen {
+  --ctp-accent: var(--ctp-yellowgreen) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-aliceblue {
+  --ctp-accent: var(--ctp-aliceblue) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-maize {
+  --ctp-accent: var(--ctp-maize) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-lightsteelblue {
+  --ctp-accent: var(--ctp-lightsteelblue) !important;
+}
+
+.anuppuccin-accent-toggle.ctp-accent-mint-blue {
+  --ctp-accent: var(--ctp-mint-blue) !important;
+}

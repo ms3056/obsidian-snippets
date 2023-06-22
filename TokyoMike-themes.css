@@ -1,0 +1,338 @@
+/* @settings
+name: TokyoMike-More Themes
+id: TokyoMike-themes
+settings:
+  - 
+    id: TokyoMike-themes
+    title: Dark theme flavor
+    description: Select your preferred dark mode flavor
+    type: class-select
+    allowEmpty: true
+    default: ctp-primary-dark
+    options:
+    -
+            label: Primary
+            value: ctp-primary-dark
+    -
+            label: Blues
+            value: ctp-blues-dark
+    -       label: Forest
+            value: ctp-forest-dark
+    -
+            label: Kanagawa
+            value: ctp-kanagawa
+    -
+            label: Monokai
+            value: ctp-monokai-dark
+    -
+            label: Reds
+            value: ctp-reds-dark
+    -
+            label: Storm
+            value: ctp-storm-dark
+    -
+            label: U of M
+            value: ctp-uofm-dark
+*/
+
+
+/* Theme stuff */
+.style-settings-heading[data-id=TokyoMike-themes] .setting-item-name, .style-settings-heading[data-id=TokyoMike-themes] .setting-item-name {
+    color: var(--color-accent);
+}
+
+.setting-item:is([data-id=TokyoMike-themes]) > .setting-item-info > .setting-item-name > .style-settings-collapse-indicator::after {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18.37 2.63 14 7l-1.59-1.59a2 2 0 0 0-2.82 0L8 7l9 9 1.59-1.59a2 2 0 0 0 0-2.82L17 10l4.37-4.37a2.12 2.12 0 1 0-3-3Z'%3E%3C/path%3E%3Cpath d='M9 8c-2 3-4 3.5-7 4l8 10c2-1 6-5 6-7'%3E%3C/path%3E%3Cpath d='M14.5 17.5 4.5 15'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.setting-item:is([data-id*=TokyoMike-themes]) > .setting-item-info > .setting-item-name {
+  margin-left: -3px;
+}
+.setting-item:is([data-id*=TokyoMike-themes]) > .setting-item-info > .setting-item-name > .style-settings-collapse-indicator {
+  margin-right: 4px;
+}
+.setting-item:is([data-id*=TokyoMike-themes]) > .setting-item-info > .setting-item-name > .style-settings-collapse-indicator::after {
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  background-color: var(--color-accent);
+  content: " ";
+  display: inline-flex;
+  flex-shrink: 0;
+  height: calc(var(--font-ui-medium) + 3px);
+  width: calc(var(--font-ui-medium) + 3px);
+  margin-left: calc(-0.5 * var(--size-4-1));
+  margin-right: calc(var(--size-4-2) - 3px);
+  transition: transform 0.1s;
+  vertical-align: text-top;
+  margin-right: 0;
+}
+.setting-item:is([data-id*=TokyoMike-themes]) > .setting-item-info > .setting-item-name > .style-settings-collapse-indicator > svg {
+  display: none;
+}
+
+.setting-item:is([data-id=TokyoMike-themes],
+[data-id=anp-preview-header]):not(.is-collapsed) > .setting-item-info > .setting-item-name > .style-settings-collapse-indicator::after {
+  transform: rotate(-90deg);
+  transition: transform 0.1s;
+}
+
+
+
+.theme-dark.anp-theme-ext-dark.ctp-kanagawa {
+  --ctp-ext-rosewater: 255, 200, 148;
+  /* rgb(255, 200, 148) */
+  --ctp-ext-flamingo: 210, 126, 129;
+  /* rgb(210, 126, 129) */
+  --ctp-ext-pink: 210, 126, 153;
+  /* rgb(210, 126, 153) */
+  --ctp-ext-mauve: 149, 127, 184;
+  /* rgb(149, 127, 184) */
+  --ctp-ext-red: 255, 93, 98;
+  /* rgb(255, 93, 98) */
+  --ctp-ext-maroon: 228, 104, 118;
+  /* rgb(228, 104, 118) */
+  --ctp-ext-peach: 255, 160, 102;
+  /* rgb(255, 160, 102) */
+  --ctp-ext-yellow: 230, 195, 132;
+  /* rgb(230, 195, 132) */
+  --ctp-ext-green: 152, 187, 108;
+  /* rgb(152, 187, 108) */
+  --ctp-ext-teal: 122, 168, 159;
+  /* rgb(122, 168, 159) */
+  --ctp-ext-sky: 163, 212, 213;
+  /* rgb(163, 212, 213) */
+  --ctp-ext-sapphire: 127, 180, 202;
+  /* rgb(127, 180, 202) */
+  --ctp-ext-blue: 126, 156, 216;
+  /* rgb(126, 156, 216) */
+  --ctp-ext-lavender: 147, 138, 169;
+  /* rgb(147, 138, 169) */
+  --ctp-ext-text: 220, 215, 186;
+  /* rgb(220, 215, 186) */
+  --ctp-ext-subtext1: 212, 206, 170;
+  /* rgb(212, 206, 170) */
+  --ctp-ext-subtext0: 100, 92, 47;
+  /* rgb(100, 92, 47) */
+  --ctp-ext-overlay2: 95, 95, 124;
+  /* rgb(95, 95, 124) */
+  --ctp-ext-overlay1: 84, 84, 109;
+  /* rgb(84, 84, 109) */
+  --ctp-ext-overlay0: 73, 73, 95;
+  /* rgb(73, 73, 95) */
+  --ctp-ext-surface2: 62, 62, 81;
+  /* rgb(62, 62, 81) */
+  --ctp-ext-surface1: 54, 54, 69;
+  /* rgb(54, 54, 69) */
+  --ctp-ext-crust: 11, 11, 15;
+  /* rgb(11, 11, 15) */
+  --ctp-ext-mantle: 22, 22, 29;
+  /* rgb(22, 22, 29) */
+  --ctp-ext-base: 26, 26, 36;
+  /* rgb(21, 21, 30) */
+  --text-muted: rgb(var(--ctp-ext-subtext1));
+  --text-faint: rgb(var(--ctp-ext-subtext0));
+}
+
+
+.theme-dark.anp-theme-ext-dark.ctp-primary-dark {
+  --ctp-rosewater: 246, 206, 182;
+/* rgb(246, 206, 182)*/
+  --ctp-flamingo: 239, 195, 217;
+/* rgb(239, 195, 217)*/
+  --ctp-pink: 229, 179, 230;
+/* rgb(229, 179, 230) */
+  --ctp-mauve: 159, 120, 221;
+/* rgb(159, 120, 221) */
+  --ctp-red: 219, 96, 87;
+/* rgb(219, 96, 87) */
+  --ctp-maroon: 228, 135, 129;
+/* rgb(228, 135, 129) */
+  --ctp-peach: 246, 118, 44;
+/* rgb(246, 118, 44) */
+  --ctp-yellow: 235, 196, 0;
+/* rgb(235, 196, 0) */
+  --ctp-green: 56, 178, 125;
+/* rgb(56, 178, 125) */
+  --ctp-teal: 57, 208, 188;
+/* rgb(57, 208, 188) */
+  --ctp-sky: 77, 209, 213;
+/* rgb(77, 209, 213) */
+  --ctp-sapphire: 77, 182, 213;
+/* rgb(77, 182, 213) */
+  --ctp-blue: 77, 173, 213;
+/* rgb(77, 173, 213) */
+  --ctp-lavender: 222, 186, 232;
+/* rgb(222, 186, 232) */
+  --ctp-text: 230, 207, 179;
+/* rgb(230, 207, 179) */
+  --ctp-subtext1: 176, 160, 141;
+/* rgb(176, 160, 141) */
+  --ctp-subtext0: 171, 145, 109;
+/* rgb(171, 145, 109) */
+  --ctp-overlay2: 145, 121, 89;
+/* rgb(145, 121, 89) */
+  --ctp-overlay1: 120, 100, 74;
+/* rgb(120, 100, 74) */
+  --ctp-overlay0: 95, 79, 58;
+/* rgb(95, 79, 58) */
+  --ctp-surface2: 93, 78, 60;
+/* rgb(93, 78, 60) */
+  --ctp-surface1: 61, 52, 41;
+/* rgb(61, 52, 41) */
+  --ctp-surface0: 52, 43, 35;
+/* rgb(52, 43, 35) */
+  --ctp-base: 44, 38, 33;
+/* rgb(44, 38, 33) */
+  --ctp-mantle: 38, 33, 28;
+/* rgb(38, 33, 28) */
+  --ctp-crust: 35, 30, 26;
+/* rgb(35, 30, 26) */
+
+}
+
+.theme-dark.anp-theme-ext-dark.ctp-blues-dark {
+  --ctp-rosewater: 237, 174, 192;
+/* rgb(237, 174, 192)*/
+  --ctp-flamingo: 252, 142, 172;
+/* rgb(252, 142, 172)*/
+  --ctp-pink: 229, 179, 230;
+/* rgb(255, 105, 180) */
+  --ctp-mauve: 224, 176, 255;
+/* rgb(224, 176, 255) */
+  --ctp-red: 200, 46, 77; /* filename */
+/* rgb(200, 46, 77) */
+  --ctp-maroon: 128, 0, 0;
+/* rgb(128, 0, 0) */
+  --ctp-peach: 255, 229, 180;
+/* rgb(255, 229, 180) */
+  --ctp-yellow: 235, 196, 0;
+/* rgb(235, 196, 0) */
+  --ctp-green: 56, 178, 125;
+/* rgb(56, 178, 125) */
+  --ctp-teal: 57, 208, 188;
+/* rgb(57, 208, 188) */
+  --ctp-sky: 77, 209, 213;
+/* rgb(77, 209, 213) */
+  --ctp-sapphire: 77, 182, 213;
+/* rgb(77, 182, 213) */
+  --ctp-blue: 77, 173, 213;
+/* rgb(77, 173, 213) */
+  --ctp-lavender: 222, 186, 232;
+/* rgb(222, 186, 232) */
+  --ctp-text: 204, 230, 255; /* main text */
+/* rgb(204, 230, 255) */
+  --ctp-subtext0: 5, 78, 166;
+/* rgb(5, 78, 166) */
+  --ctp-overlay2: 60, 96, 158; /* dark calendar text */
+/* rgb(60, 96, 158) */
+
+  --ctp-surface1: 2, 0, 16; /* seems unused */
+/* rgb(2, 0, 36) */
+  --ctp-surface0: 2, 40, 70; /* lines and borders */
+/* rgb(2, 40, 70) */
+  --ctp-base: 2, 0, 16; /* main background */
+/* rgb(2, 0, 36) */
+  --ctp-mantle: 2, 0, 16; /* sidebar background */
+/* rgb(2, 0, 36) */
+  --ctp-crust: 20, 40, 90; /* shadows, popups */
+/* rgb(20, 40, 90) */
+
+}
+
+.theme-dark.anp-theme-ext-dark.ctp-reds-dark {
+  --ctp-red: 200, 5, 5; /* filename */
+/* rgb(255, 5, 5) */
+  --ctp-text: 255, 229, 235; /* main text */
+/* rgb(255, 229, 235) */
+  --ctp-overlay2: 199, 0, 0; /* dark calendar text */
+/* rgb(199, 0, 0) */
+  --ctp-surface0: 50, 0, 0; /* lines and borders */
+/* rgb(50, 0, 0) */
+  --ctp-base: 10, 0, 0; /* main background */
+/* rgb(10, 0, 0) */
+  --ctp-mantle: 10, 0, 0; /* sidebar background */
+/* rgb(10, 0, 0) */
+  --ctp-crust: 75, 0, 0; /* shadows, popups */
+/* rgb(75, 0, 0) */
+}
+
+.theme-dark.anp-theme-ext-dark.ctp-uofm-dark {
+  --ctp-red: 255, 203, 5; /* filename */
+/* rgb(255, 203, 5) */
+  --ctp-text: 150, 179, 200; /* main text */
+/* rgb(150, 179, 200) */
+  --ctp-overlay2: 70, 110, 147; /* dark calendar text */
+/* rgb(70, 110, 147) */
+  --ctp-surface0: 56, 96, 133; /* lines and borders */
+/* rgb(56, 96, 133) */
+  --ctp-base: 0, 9, 46; /* main background */
+/* rgb(0, 9, 46) */
+  --ctp-mantle: 0, 19, 56; /* sidebar background */
+/* rgb(0, 19, 56) */
+  --ctp-crust: 39, 79, 116; /* shadows, popups */
+/* rgb(39, 79, 116) */
+
+}
+
+.theme-dark.anp-theme-ext-dark.ctp-monokai-dark {
+  --ctp-subtext0: 255, 138, 96; /* Settings Headers */
+/* color: rgb(5, 78, 166) */
+  --ctp-overlay2: 60, 96, 158; /* dark calendar text */
+/* color: rgb(60, 96, 158) */
+  --ctp-overlay1: 7, 50, 148;
+/* color: rgb(7, 50, 148) */
+  --ctp-overlay0: 9, 37, 140;
+/* color: rgb(9, 37, 140) */
+  --ctp-surface2: 220, 75, 5;
+/* color: rgb(220, 75, 5) */
+  --ctp-red: 235, 203, 139; /* filename */
+/* color: rgb(235, 203, 139) */
+  --ctp-text: 130, 159, 220; /* main text */
+/* color: rgb(130, 159, 220) */
+  --ctp-overlay2: 252, 152, 103; /* dark calendar text */
+/* color: rgb(252, 152, 103) */
+  --ctp-base: 34, 31, 34; /* main background */
+/* color: rgb(34, 31, 34) */
+  --ctp-mantle: 45, 42, 46; /* sidebar background */
+/* color: rgb(34, 22, 15) */
+  --ctp-crust: 45, 42, 46; /* shadows, popups and top bar */
+/* color: rgb(45, 42, 46) */
+}
+
+.theme-dark.anp-theme-ext-dark.ctp-forest-dark {
+  --ctp-subtext0: 255, 138, 96; /* Settings Headers */
+/* color: rgb(5, 78, 166) */
+  --ctp-overlay2: 60, 96, 158; /* dark calendar text */
+/* color: rgb(60, 96, 158) */
+  --ctp-text: 138, 157, 160; /* main text */
+/* rgb(138, 157, 160) */
+  --ctp-mantle: 49, 64, 66; /* sidebar background */
+/* rgb(49, 64, 66) */
+  --ctp-base: 33, 43, 45; /* main background */
+/* rgb(33, 43, 45) */
+  --ctp-crust: 23, 33, 35;
+/* color: rgb(23, 33, 35); */
+  --ctp-overlay2:124, 102, 114; /* dark calendar text */
+/* rgb(124, 102, 114) */
+--ctp-red: 45, 33, 43; /* filename */
+/* rgb(45, 33, 43) */
+}
+
+.theme-dark.anp-theme-ext-dark.ctp-storm-dark {
+  --ctp-text: 178, 185, 207; /* main text */
+/* rgb(178, 185, 207) */
+  --ctp-mantle: 46, 53, 75; /* sidebar background */
+/* rgb(46, 53, 75) */
+  --ctp-base: 38, 44, 62; /* main background */
+ color: rgb(38, 44, 62) 
+  --ctp-overlay2: 72, 132, 122; /* dark calendar text */
+/* rgb(72, 132, 122) */
+  --ctp-crust: 65, 57, 86; /* shadows, popups and top bar */
+/* rgb(65, 57, 86) */
+  --ctp-red: 86, 119, 129; /* filename */
+/* rgb(86, 119, 129) */
+}
+
+
+
+
