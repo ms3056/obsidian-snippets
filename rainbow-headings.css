@@ -1,5 +1,6 @@
 /* ==========================================================
    RAINBOW HEADINGS — accent-based hue shift for H1–H6
+   v1.1.0-sync-test: content marker added 2026-11-12
    Takes the theme's accent (<--accent-h/s/l) as the anchor and
    shifts hue per heading level. Presets are body classes chosen
    in Style Settings; Custom mode uses the two sliders below.

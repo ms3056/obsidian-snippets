@@ -1,18 +1,62 @@
 {
   "name": "HiroMike Obsidian Snippets",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "CSS snippets for the main and Writing vaults. Installed and updated by Snippet Sync.",
   "snippets": [
-    { "id": "accent-styles", "file": "accent-styles.css", "description": "Accent color styling helpers" },
-    { "id": "active-file-highlight", "file": "active-file-highlight.css", "description": "Highlight the active file in the file explorer" },
-    { "id": "auto-hide", "file": "auto-hide.css", "description": "Auto-hide the sidebars (Explorer Category Tabs integration)" },
-    { "id": "card_layout", "file": "card_layout.css", "description": "Card-style note layouts" },
-    { "id": "compact-tasks", "file": "compact-tasks.css", "description": "Compact Tasks plugin rendering" },
-    { "id": "hide-scrollbars", "file": "hide-scrollbars.css", "description": "Hide scrollbars for a cleaner UI" },
-    { "id": "rainbow-headings", "file": "rainbow-headings.css", "description": "Rainbow-colored headings" },
-    { "id": "sidebar-tabs", "file": "sidebar-tabs.css", "description": "Sidebar tab styling" },
-    { "id": "table-styling", "file": "table-styling.css", "description": "Table styling improvements" },
-    { "id": "top-tabs", "file": "top-tabs.css", "description": "Top tabs styling" },
-    { "id": "ui-colors", "file": "ui-colors.css", "description": "UI color tweaks (dark theme palette)" }
+    {
+      "id": "accent-styles",
+      "file": "accent-styles.css",
+      "description": "Accent color styling helpers"
+    },
+    {
+      "id": "active-file-highlight",
+      "file": "active-file-highlight.css",
+      "description": "Highlight the active file in the file explorer"
+    },
+    {
+      "id": "auto-hide",
+      "file": "auto-hide.css",
+      "description": "Auto-hide the sidebars (Explorer Category Tabs integration)"
+    },
+    {
+      "id": "card_layout",
+      "file": "card_layout.css",
+      "description": "Card-style note layouts"
+    },
+    {
+      "id": "compact-tasks",
+      "file": "compact-tasks.css",
+      "description": "Compact Tasks plugin rendering"
+    },
+    {
+      "id": "hide-scrollbars",
+      "file": "hide-scrollbars.css",
+      "description": "Hide scrollbars for a cleaner UI"
+    },
+    {
+      "id": "rainbow-headings",
+      "file": "rainbow-headings.css",
+      "description": "Rainbow-colored headings"
+    },
+    {
+      "id": "sidebar-tabs",
+      "file": "sidebar-tabs.css",
+      "description": "Sidebar tab styling"
+    },
+    {
+      "id": "table-styling",
+      "file": "table-styling.css",
+      "description": "Table styling improvements"
+    },
+    {
+      "id": "top-tabs",
+      "file": "top-tabs.css",
+      "description": "Top tabs styling"
+    },
+    {
+      "id": "ui-colors",
+      "file": "ui-colors.css",
+      "description": "UI color tweaks (dark theme palette)"
+    }
   ]
 }
