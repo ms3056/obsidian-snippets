@@ -1,0 +1,206 @@
+/* =========================================================
+   Compact Sidebar Tasklist v3 (Fixed Checkboxes & Layout)
+   ========================================================= */
+
+/* 1. Tighten page padding and hide inline title/properties */
+.markdown-preview-view.tasklist,
+.markdown-source-view.tasklist .cm-scroller {
+  padding: 8px 10px !important;
+  font-size: 12px !important;
+}
+
+.tasklist .inline-title,
+.tasklist .metadata-container {
+  display: none !important;
+}
+
+/* 2. Hide the "Filter by description..." toolbar, Copy button & "5 tasks" count */
+.tasklist .tasks-toolbar,
+.tasklist .plugin-tasks-toolbar,
+.tasklist .block-language-tasks input[type="search"],
+.tasklist .block-language-tasks input[placeholder*="Filter"],
+.tasklist .block-language-tasks div:has(> input[placeholder*="Filter"]),
+.tasklist .block-language-tasks .edit-block-button,
+.tasklist .block-language-tasks .copy-code-button,
+.tasklist .tasks-CopyButton,
+.tasklist .task-list-item-counter,
+.tasklist .tasks-count,
+.tasklist div[class*="tasks-count"] {
+  display: none !important;
+}
+
+/* 3. Style H3 Headings as Dark GTD Section Bars */
+.tasklist.markdown-preview-view h3,
+.tasklist .HyperMD-header-3 {
+  --h3-accent-opacity: 0.60;
+  --h3-hue-shift: 180;
+  --h3-saturation-shift: 0%;
+  --h3-lightness-shift: 0%;
+  display: flex !important;
+  align-items: center;
+  background-color: var(--background-secondary-alt, #262626) !important;
+  /* border-left: 3px solid var(--interactive-accent, #ef4444)  !important; */
+  border-left: 3px solid hsla(
+    calc(var(--accent-h) + var(--h3-hue-shift)),
+    calc(var(--accent-s) + var(--h3-saturation-shift)),
+    calc(var(--accent-l) + var(--h3-lightness-shift)),
+    var(--h3-accent-opacity)
+  ) !important;
+  border-radius: 4px;
+  padding: 5px 10px 5px 24px !important;
+  margin: 8px 0 4px 0 !important;
+  font-size: 11.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  /* color: var(--text-normal) !important; */
+    color: hsla(
+    calc(var(--accent-h) + var(--h3-hue-shift) + 30),
+    calc(var(--accent-s) + var(--h3-saturation-shift)),
+    calc(var(--accent-l) + var(--h3-lightness-shift)),
+    calc(var(--h3-accent-opacity) + 0.25)
+  ) !important;
+  position: relative;
+  line-height: 1.3 !important;
+  box-shadow: inset 0 0 0 1px var(--background-modifier-border);
+}
+
+.tasklist.markdown-preview-view h3 .heading-collapse-indicator,
+.tasklist .HyperMD-header-3 .cm-fold-indicator .collapse-indicator {
+  opacity: 0.9 !important;
+  position: absolute !important;
+  left: 6px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: var(--text-muted) !important;
+}
+
+/* 4. Reset list container padding so checkboxes aren't clipped off-screen */
+.tasklist .block-language-tasks,
+.tasklist .cm-embed-block:has(.block-language-tasks) {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.tasklist ul.contains-task-list,
+.tasklist ul.plugin-tasks-query-result {
+  padding-inline-start: 4px !important;
+  margin: 2px 0 6px 0 !important;
+  list-style: none !important;
+}
+
+/* 5. Flex row for each task item */
+.tasklist li.task-list-item,
+.tasklist li.plugin-tasks-list-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 3px 4px !important;
+  margin: 1px 0 !important;
+  text-indent: 0 !important;
+  padding-inline-start: 2px !important;
+  border-radius: 4px;
+  line-height: 1.35 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+.tasklist li.task-list-item:hover {
+  background-color: var(--background-modifier-hover);
+}
+
+/* 6. Force Checkbox into the row (Override Obsidian's -1.5em negative margin) */
+.tasklist input.task-list-item-checkbox,
+.tasklist li.task-list-item > input[type="checkbox"],
+.tasklist .plugin-tasks-list-item input[type="checkbox"] {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  position: relative !important;
+  left: 0 !important;
+  top: 0 !important;
+  margin: 0 4px 0 0 !important;
+  margin-inline-start: 0 !important; /* Critical: stops off-screen left clipping */
+  padding: 0 !important;
+  width: 14px !important;
+  height: 14px !important;
+  min-width: 14px !important;
+  min-height: 14px !important;
+  flex-shrink: 0 !important;
+  border: 1.2px solid var(--text-muted, #888888) !important;
+  border-radius: 50% !important;
+  background-color: transparent !important;
+  cursor: pointer;
+  opacity: 0.82 !important;
+  visibility: visible !important;
+}
+
+/* Keep plain unchecked task boxes circular when task-icons.css is enabled. */
+.tasklist .task-list-item[data-task=" "] input.task-list-item-checkbox {
+  border-radius: 50% !important;
+}
+
+/* Hide task plugin descriptions that start with an empty string */
+.tasklist .plugin-tasks-list-item[data-task=" "] .task-description {
+    display: none !important;
+}
+
+.tasklist input.task-list-item-checkbox:hover {
+  border-color: var(--interactive-accent) !important;
+}
+
+.tasklist input.task-list-item-checkbox:checked {
+  background-color: var(--interactive-accent) !important;
+  border-color: var(--interactive-accent) !important;
+}
+
+/* 7. Truncate long task descriptions cleanly */
+.tasklist .tasks-list-text,
+.tasklist .task-description {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 12.5px;
+}
+
+.tasklist .task-description > span {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* 8. Slightly mute task text */
+.tasklist .tasks-list-text,
+.tasklist .task-description {
+  color: color-mix(in srgb, var(--text-normal) 75%, var(--text-muted)) !important;
+}
+
+/* 9. Place the priority marker before the title */
+.tasklist .tasks-list-text > .task-priority {
+  order: -1;
+  flex-shrink: 0;
+}
+
+/* 10. Highlight overdue tasks */
+.tasklist li.plugin-tasks-list-item[data-task-due^="past"] .tasks-list-text,
+.tasklist li.plugin-tasks-list-item[data-task-due^="past"] .task-description {
+  color: color-mix(in srgb, var(--text-normal) 65%, var(--color-red)) !important;
+}
+
+/* 11. Hide trailing Edit and Postpone buttons */
+.tasklist .tasks-edit,
+.tasklist .tasks-postpone,
+.tasklist a.tasks-edit,
+.tasklist .tasks-backlink {
+  /* display: none !important; */
+}

@@ -1,0 +1,191 @@
+/* ==========================================================
+   TOP TABS — Border-style tab pills + centering
+   Only affects the topmost FILE tabs (the mod-root split's
+   tab strip). Left/right sidebar tab bars are untouched.
+   Style Settings group mirrors Border's tab options:
+   Pills / Underline / Off, a center toggle, and a padding
+   slider so tabs can hug just the text width.
+   ========================================================== */
+
+/* @settings
+name: Top Tabs
+id: top-tabs
+settings:
+    -
+        id: tt-style
+        title: "Tab style"
+        description: "Pills = Border-style rounded active pill with accent underline. Pill only = same pill, no underline. Underline = slim accent bar only. Off = Obsidian core tab look."
+        type: class-select
+        allowEmpty: false
+        default: tt-pills
+        options:
+            -
+                label: "Pills + underline (Border)"
+                value: tt-pills
+            -
+                label: "Pill only (no underline)"
+                value: tt-pills-plain
+            -
+                label: "Underline only"
+                value: tt-underline
+            -
+                label: "Off (core)"
+                value: tt-off
+    -
+        id: tt-pill-accent
+        title: "Pill accent intensity"
+        description: "How much accent color is mixed into the active pill background. 0 is neutral, 20 is clearly tinted."
+        type: variable-number-slider
+        min: 0
+        max: 60
+        step: 1
+        default: 10
+    -
+        id: tt-line-accent
+        title: "Underline accent intensity"
+        description: "Opacity of the accent underline. 100 is solid accent, lower fades it toward the background."
+        type: variable-number-slider
+        min: 0
+        max: 100
+        step: 5
+        default: 100
+    -
+        id: tt-center
+        title: "Center top tabs"
+        description: "Center the file tabs in the top strip when they fit."
+        type: class-toggle
+        default: true
+    -
+        id: tt-pad
+        title: "Tab horizontal padding"
+        description: "Space left and right of the tab text; 0 makes the tab exactly text width."
+        type: variable-number-slider
+        min: 0
+        max: 20
+        step: 1
+        default: 6
+*/
+
+/* Compact tabs: root headers stop stretching to fill the bar
+   (core gives them flex: 1 1 0) and size to their text instead
+   of the fixed --tab-width. Core sets container-type: inline-size
+   on the root header, which forbids content-based sizing — kill the
+   containment, then width: max-content makes the tab exactly fit
+   its filename (core's max-width ellipsis cap still applies).
+   --tt-pad must be multiplied by 1px (bare slider number). */
+body:not(.tt-off) .workspace-split.mod-root .workspace-tab-header {
+    flex: 0 0 auto !important;
+    width: max-content !important;
+    container-type: normal !important;
+    container-name: none !important;
+    padding: 1px calc(var(--tt-pad, 6) * 1px) 2px !important;
+}
+
+/* Ensure the title text inside can size freely (width: 100% from
+   core resolves against the now-content-sized header) */
+body:not(.tt-off) .workspace-split.mod-root .workspace-tab-header-inner {
+    width: fit-content !important;
+    min-width: max-content !important;
+}
+
+/* Pill rounding on every top tab header (Border rounds the inner).
+   overflow: visible stops the pill from clipping the underline and
+   shadow — the inner is content-sized so nothing can spill out. */
+body:not(.tt-off) .workspace-split.mod-root .workspace-tab-header-inner {
+    position: relative !important;
+    border-radius: 6px !important;
+    overflow: visible !important;
+}
+
+/* Hide core's right-edge tab divider — the little dark sliver
+   (workspace-tab-header-inner::after) that reads as a box */
+body:not(.tt-off) .workspace-split.mod-root .workspace-tab-header-inner::after {
+    display: none !important;
+}
+
+/* Kill core's fold-corner squares: .workspace-tab-header::before/::after
+   are calc(var(--tab-curve) * 2) shapes painted at the tab's bottom
+   corners to mimic the old folded-tab outline. On top of our pill they
+   read as LITTLE RECTANGLES covering the pill's bottom and the accent
+   underline. The pill design doesn't need them. */
+body:not(.tt-off) .workspace-split.mod-root .workspace-tab-header::before,
+body:not(.tt-off) .workspace-split.mod-root .workspace-tab-header::after {
+    display: none !important;
+}
+
+/* Active tab pill — light (Border's activated-tab-header values,
+   plus accent tint driven by the tt-pill-accent slider) */
+body.tt-pills:not(.theme-dark) .workspace-split.mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header.is-active .workspace-tab-header-inner,
+body.tt-pills-plain:not(.theme-dark) .workspace-split.mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header.is-active .workspace-tab-header-inner {
+    background: color-mix(in srgb, var(--interactive-accent) calc(var(--tt-pill-accent, 10) * 1%), var(--background-primary)) !important;
+    box-shadow: 0 -1px 0 0 rgba(255, 255, 255, .24), 0 0 0 1px var(--background-modifier-border), 0 0 4px var(--background-modifier-border), 0px 2px 6px -4px var(--background-modifier-border-muted), inset 0 -1px 3px 0 var(--background-tertiary) !important;
+}
+
+/* Active tab pill — dark: floating pill (hovering 4px above the
+   strip's bottom edge, rounded on all four corners). Muted accent
+   fill; tint intensity comes from the tt-pill-accent slider. No
+   outline ring — the accent underline carries the active indicator. */
+body.tt-pills.theme-dark .workspace-split.mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header.is-active .workspace-tab-header-inner,
+body.tt-pills-plain.theme-dark .workspace-split.mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header.is-active .workspace-tab-header-inner {
+    background: color-mix(in srgb, var(--interactive-accent) calc(var(--tt-pill-accent, 10) * 1%), var(--background-modifier-active-hover)) !important;
+    border-radius: 6px !important;
+}
+
+/* Dark: hide core's own active-header background — without this its
+   neutral panel color shows as a band above the pill. */
+body.tt-pills.theme-dark .workspace-split.mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header.is-active,
+body.tt-pills-plain.theme-dark .workspace-split.mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header.is-active {
+    background-color: transparent !important;
+}
+
+/* Dark: lift the pill off the strip's bottom edge — header bottom
+   padding of 4px is the float gap (matches Border's own pill gap;
+   core sizes the inner at height: 100%, so the fill stops 4px above
+   the strip bottom). Light mode keeps its 2px float. */
+body:not(.tt-off).theme-dark .workspace-split.mod-root .workspace-tab-header {
+    padding-bottom: 4px !important;
+}
+
+/* Accent underline on the active tab (Border's signature strip;
+   also the whole "underline" style when pills are off). A small
+   inset bar with pill ends — it never touches the pill's corners,
+   so nothing can look clipped at left or right. Shown only for
+   the pills-with-underline and underline-only styles; opacity
+   driven by the tt-line-accent slider. */
+body.tt-pills .workspace-split.mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header.is-active .workspace-tab-header-inner::before,
+body.tt-underline .workspace-split.mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header.is-active .workspace-tab-header-inner::before {
+    content: "" !important;
+    position: absolute !important;
+    left: 3px !important;
+    right: 3px !important;
+    bottom: 1px !important;
+    height: 3px !important;
+    border-radius: 99px !important;
+    background-color: color-mix(in srgb, var(--interactive-accent) calc(var(--tt-line-accent, 100) * 1%), transparent) !important;
+    pointer-events: none !important;
+}
+
+/* Stop the strip's overflow: clip from chopping the pill's shadow
+   (and underline) at the right/bottom edges when the active tab is
+   the last one — allow up to 12px of overflow before clipping. */
+body:not(.tt-off) .workspace-split.mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header-container-inner {
+    overflow-clip-margin: 12px !important;
+}
+
+/* Center the WHOLE tab group (tabs + the "+" button) in the strip.
+   Core's spacer also has flex-grow: 1 — with the inner also forced
+   to grow, leftover space split between them and the "+" (a sibling
+   of the inner) appeared centered. Instead: container-level
+   justify-content centers the group, spacer stops growing, and the
+   inner returns to its natural content width. "+" lands directly
+   right of the rightmost tab, exactly as requested. */
+body.tt-center .workspace-split.mod-root .workspace-tab-header-container {
+    justify-content: center !important;
+}
+body.tt-center .workspace-split.mod-root .workspace-tab-header-container-inner {
+    flex: 0 1 auto !important;
+    justify-content: flex-start !important;
+}
+body.tt-center .workspace-split.mod-root .workspace-tab-header-spacer {
+    flex-grow: 0 !important;
+}

@@ -1,0 +1,250 @@
+/* @settings
+name: Card Layout
+id: universal-card-layout
+settings:
+    -
+        id: card-toggles-heading
+        title: Disable Card Layout Per Element
+        type: heading
+        level: 2
+    -
+        id: disable-card-editor
+        title: Disable Card Layout - Main Editor Panes
+        type: class-toggle
+        default: false
+    -
+        id: disable-card-left-sidebar
+        title: Disable Card Layout - Left Sidebar Panels
+        type: class-toggle
+        default: false
+    -
+        id: disable-card-right-sidebar
+        title: Disable Card Layout - Right Sidebar Panels
+        type: class-toggle
+        default: false
+    -
+        id: disable-card-ribbon
+        title: Disable Card Layout - Left Ribbon Menu
+        type: class-toggle
+        default: false
+    -
+        id: disable-card-statusbar
+        title: Disable Card Layout - Status Bar
+        type: class-toggle
+        default: false
+    -
+        id: card-dimensions-heading
+        title: Card Dimensions & Styling
+        type: heading
+        level: 2
+    -
+        id: card-gap
+        title: Gap Between Cards
+        type: variable-number-slider
+        default: 8
+        min: 2
+        max: 20
+        step: 1
+        format: px
+    -
+        id: card-radius
+        title: Card Corner Radius
+        type: variable-number-slider
+        default: 12
+        min: 0
+        max: 24
+        step: 1
+        format: px
+    -
+        id: card-border-width
+        title: Card Border Width
+        type: variable-number-slider
+        default: 1
+        min: 0
+        max: 3
+        step: 1
+        format: px
+*/
+
+body {
+    --card-gap: 8px;
+    --card-radius: 12px;
+    --card-border-width: 1px;
+    --card-border: var(--card-border-width) solid var(--background-modifier-border);
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --canvas-bg-base: var(--background-secondary-alt, var(--color-base-10));
+    --canvas-bg-lighten: clamp(0%, calc(0% - var(--ui-card-gap-background-adjustment, 0%)), 100%);
+    --canvas-bg-darken: clamp(0%, var(--ui-card-gap-background-adjustment, 0%), 100%);
+    --canvas-bg: color-mix(
+        in srgb,
+        color-mix(
+            in srgb,
+            var(--canvas-bg-base) calc(100% - var(--canvas-bg-lighten)),
+            white var(--canvas-bg-lighten)
+        ) calc(100% - var(--canvas-bg-darken)),
+        black var(--canvas-bg-darken)
+    );
+    /* Core-var overrides: consumed by Obsidian core, not by this file —
+       zero out native tab outlines and splitter hairlines so cards sit flush. */
+    --tab-outline-width: 0px;
+    --divider-width: 0px;
+}
+
+.theme-dark {
+    --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
+    --canvas-bg-base: var(--background-secondary-alt, var(--color-base-00));
+}
+
+/* KILL THE TOP-LEFT RIBBON COLOR BLOCK (.mod-primary::before) */
+.workspace-ribbon::before,
+.workspace-ribbon.mod-primary::before,
+.workspace-ribbon.mod-left::before {
+    content: none !important;
+    display: none !important;
+    background: transparent !important;
+    border: none !important;
+    height: 0 !important;
+    width: 0 !important;
+}
+
+/* 1. Recessed Canvas Background & Workspace Spacing */
+.app-container,
+.horizontal-main-container,
+.workspace {
+    background-color: var(--canvas-bg) !important;
+}
+
+.workspace {
+    padding: var(--card-gap) !important;
+    gap: var(--card-gap) !important;
+}
+
+.workspace-split:not(.is-sidedock-collapsed) {
+    background: transparent !important;
+    border: none !important;
+    gap: var(--card-gap) !important;
+}
+
+.workspace-split.is-sidedock-collapsed {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+/* 2. Main Editor Cards */
+body:not(.disable-card-editor) .workspace-split.mod-root .workspace-tabs {
+    background-color: var(--background-primary) !important;
+    border-radius: var(--card-radius) !important;
+    border: var(--card-border) !important;
+    box-shadow: var(--card-shadow) !important;
+    overflow: hidden !important;
+}
+
+body:not(.disable-card-editor) .workspace-split.mod-root .workspace-tabs :is(.workspace-tab-container, .workspace-leaf, .workspace-leaf-content) {
+    background-color: var(--background-primary) !important;
+}
+
+/* 3. Left Sidebar Cards (Plus Vault Profile Card Rounding) */
+body:not(.disable-card-left-sidebar) .workspace-split.mod-left-split:not(.is-sidedock-collapsed) .workspace-tabs {
+    background-color: var(--background-primary) !important;
+    border-radius: var(--card-radius) !important;
+    border: var(--card-border) !important;
+    box-shadow: var(--card-shadow) !important;
+    overflow: hidden !important;
+}
+
+body:not(.disable-card-left-sidebar) .workspace-split.mod-left-split:not(.is-sidedock-collapsed) .workspace-sidedock-vault-profile {
+    background-color: var(--background-primary) !important;
+    border-radius: var(--card-radius) !important;
+    border: var(--card-border) !important;
+    box-shadow: var(--card-shadow) !important;
+    margin-top: 0 !important;
+}
+
+body:not(.disable-card-left-sidebar) .workspace-split.mod-left-split:not(.is-sidedock-collapsed) :is(.workspace-tab-container, .workspace-leaf, .workspace-leaf-content) {
+    background-color: var(--background-primary) !important;
+}
+
+/* Center top tab-icon group in left sidebar cards */
+body:not(.disable-card-left-sidebar) .workspace-split.mod-left-split:not(.is-sidedock-collapsed) .workspace-tab-header-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+body:not(.disable-card-left-sidebar) .workspace-split.mod-left-split:not(.is-sidedock-collapsed) .workspace-tab-header-container-inner {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin-inline: 0 !important;
+}
+
+/* Center top tab-icon group in right sidebar cards */
+body:not(.disable-card-right-sidebar) .workspace-split.mod-right-split:not(.is-sidedock-collapsed) .workspace-tab-header-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+body:not(.disable-card-right-sidebar) .workspace-split.mod-right-split:not(.is-sidedock-collapsed) .workspace-tab-header-container-inner {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin-inline: 0 !important;
+}
+
+/* 4. Right Sidebar Cards */
+body:not(.disable-card-right-sidebar) .workspace-split.mod-right-split:not(.is-sidedock-collapsed) .workspace-tabs {
+    background-color: var(--background-primary) !important;
+    border-radius: var(--card-radius) !important;
+    border: var(--card-border) !important;
+    box-shadow: var(--card-shadow) !important;
+    overflow: hidden !important;
+}
+
+body:not(.disable-card-right-sidebar) .workspace-split.mod-right-split:not(.is-sidedock-collapsed) :is(.workspace-tab-container, .workspace-leaf, .workspace-leaf-content) {
+    background-color: var(--background-primary) !important;
+}
+
+/* 5. Left Ribbon Card (Matches .mod-primary AND .mod-left)
+   NOTE: deliberately NO :not(.is-collapsed) gate — Obsidian adds
+   .is-collapsed to the primary ribbon when the left panel is
+   collapsed; gating would strip the rounded card (square caps)
+   exactly when the panel is closed. Same trap as auto-hide.css D. */
+body:not(.disable-card-ribbon) .workspace-ribbon:is(.mod-primary, .mod-left) {
+    background-color: var(--background-primary) !important;
+    border: var(--card-border) !important;
+    border-radius: var(--card-radius) !important;
+    box-shadow: var(--card-shadow) !important;
+    margin: 0 !important;
+}
+
+/* Hide unused empty secondary right ribbon */
+.workspace-ribbon.mod-secondary:empty {
+    display: none !important;
+}
+
+/* 6. Status Bar Card */
+body:not(.disable-card-statusbar) .status-bar {
+    border-radius: calc(var(--card-radius) * 0.75) !important;
+    margin: 0 var(--card-gap) var(--card-gap) 0 !important;
+    border: var(--card-border) !important;
+    background-color: var(--background-primary) !important;
+    box-shadow: var(--card-shadow) !important;
+}
+
+/* 7. Neutralize Native Splitter Hairlines */
+hr.workspace-leaf-resize-handle,
+.workspace-leaf-resize-handle {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    border-width: 0 !important;
+    box-shadow: none !important;
+}
+
+.workspace-leaf-resize-handle:hover,
+.workspace-leaf-resize-handle:active {
+    background-color: var(--interactive-accent) !important;
+    border-radius: 99px;
+    opacity: 0.75;
+}

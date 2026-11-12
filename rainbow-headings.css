@@ -1,0 +1,104 @@
+/* ==========================================================
+   RAINBOW HEADINGS — accent-based hue shift for H1–H6
+   Takes the theme's accent (<--accent-h/s/l) as the anchor and
+   shifts hue per heading level. Presets are body classes chosen
+   in Style Settings; Custom mode uses the two sliders below.
+   ========================================================== */
+
+/* @settings
+name: Rainbow Headings
+id: rainbow-headings
+settings:
+    -
+        id: hrbd-preset
+        title: "Hue pattern"
+        description: "Pick a preset, or choose Custom and set the start offset and shift distance yourself. Off disables the coloring."
+        type: class-select
+        allowEmpty: false
+        default: hrbd-off
+        options:
+            -
+                label: "Off (default)"
+                value: hrbd-off
+            -
+                label: "Rainbow (60 degrees apart)"
+                value: hrbd-rainbow
+            -
+                label: "Triadic (120 degrees apart)"
+                value: hrbd-triadic
+            -
+                label: "Warm shift (35 degrees apart)"
+                value: hrbd-warm
+            -
+                label: "Cool shift (35 degrees apart, reversed)"
+                value: hrbd-cool
+            -
+                label: "Custom"
+                value: hrbd-custom
+    -
+        id: hrbd-start-hue
+        title: "Start hue offset (degrees, Custom)"
+        description: "Degrees added to the accent hue for H1. Negative moves counter-clockwise; -180 to 180. No format suffix here on purpose — the plugin appends format to the CSS value and hue math needs bare numbers."
+        type: variable-number-slider
+        min: -180
+        max: 180
+        step: 5
+        default: 0
+    -
+        id: hrbd-step-hue
+        title: "Hue distance between levels (degrees, Custom)"
+        description: "Degrees shifted per heading level; positive goes clockwise on the color wheel. 15 to 120 recommended. Same no-suffix rule as above."
+        type: variable-number-slider
+        min: 0
+        max: 180
+        step: 5
+        default: 45
+*/
+
+/* Preset definitions: each body class sets the two knobs.
+   Custom does nothing here — its values come from the sliders. */
+body.hrbd-rainbow {
+    --hrbd-start-hue: 0;
+    --hrbd-step-hue: 60;
+}
+body.hrbd-triadic {
+    --hrbd-start-hue: 0;
+    --hrbd-step-hue: 120;
+}
+body.hrbd-warm {
+    --hrbd-start-hue: 0;
+    --hrbd-step-hue: 35;
+}
+body.hrbd-cool {
+    --hrbd-start-hue: 0;
+    --hrbd-step-hue: -35;
+}
+body.hrbd-custom {
+    /* --hrbd-start-hue / --hrbd-step-hue come from the sliders */
+}
+
+/* Colors. One block per level; hue is computed from the accent
+   hue plus the start offset plus N shift steps. Written as repeated
+   additions (no calc() multiplication) for max compatibility —
+   hsl() wraps hues past 360 automatically.
+   Covers reading view (.markdown-rendered) and Live Preview
+   (.cm-s-obsidian .HyperMD-header-N). !important beats themes. */
+body:is(.hrbd-rainbow, .hrbd-triadic, .hrbd-warm, .hrbd-cool, .hrbd-custom) :is(.markdown-rendered h1, .cm-s-obsidian .HyperMD-header-1) {
+    color: hsl(calc(var(--accent-h) + var(--hrbd-start-hue)) var(--accent-s) var(--accent-l)) !important;
+}
+body:is(.hrbd-rainbow, .hrbd-triadic, .hrbd-warm, .hrbd-cool, .hrbd-custom) :is(.markdown-rendered h2, .cm-s-obsidian .HyperMD-header-2) {
+    color: hsl(calc(var(--accent-h) + var(--hrbd-start-hue) + var(--hrbd-step-hue)) var(--accent-s) var(--accent-l)) !important;
+}
+body:is(.hrbd-rainbow, .hrbd-triadic, .hrbd-warm, .hrbd-cool, .hrbd-custom) :is(.markdown-rendered h3, .cm-s-obsidian .HyperMD-header-3) {
+    color: hsl(calc(var(--accent-h) + var(--hrbd-start-hue) + var(--hrbd-step-hue) + var(--hrbd-step-hue)) var(--accent-s) var(--accent-l));
+}
+body:is(.hrbd-rainbow, .hrbd-triadic, .hrbd-warm, .hrbd-cool, .hrbd-custom) :is(.markdown-rendered h4, .cm-s-obsidian .HyperMD-header-4) {
+    color: hsl(calc(var(--accent-h) + var(--hrbd-start-hue) + var(--hrbd-step-hue) + var(--hrbd-step-hue) + var(--hrbd-step-hue)) var(--accent-s) var(--accent-l)) !important;
+}
+body:is(.hrbd-rainbow, .hrbd-triadic, .hrbd-warm, .hrbd-cool, .hrbd-custom) :is(.markdown-rendered h5, .cm-s-obsidian .HyperMD-header-5) {
+    color: hsl(calc(var(--accent-h) + var(--hrbd-start-hue) + var(--hrbd-step-hue) + var(--hrbd-step-hue) + var(--hrbd-step-hue) + var(--hrbd-step-hue)) var(--accent-s) var(--accent-l)) !important;
+}
+body:is(.hrbd-rainbow, .hrbd-triadic, .hrbd-warm, .hrbd-cool, .hrbd-custom) :is(.markdown-rendered h6, .cm-s-obsidian .HyperMD-header-6) {
+    color: hsl(calc(var(--accent-h) + var(--hrbd-start-hue) + var(--hrbd-step-hue) + var(--hrbd-step-hue) + var(--hrbd-step-hue) + var(--hrbd-step-hue) + var(--hrbd-step-hue)) var(--accent-s) var(--accent-l)) !important;
+}
+

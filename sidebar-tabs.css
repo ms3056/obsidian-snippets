@@ -1,0 +1,132 @@
+/* @settings
+name: Sidebar Tabs
+id: sidebar-tabs
+settings:
+    -
+        id: sb-tab-style
+        title: Active sidebar tab style
+        description: Style the selected tab in the left and right sidebars. Main editor tabs are unaffected.
+        type: class-select
+        allowEmpty: false
+        default: sb-tabs-soft
+        options:
+            -
+                label: Soft pill
+                value: sb-tabs-soft
+            -
+                label: Accent pill
+                value: sb-tabs-accent
+            -
+                label: Underline
+                value: sb-tabs-underline
+            -
+                label: Obsidian default
+                value: sb-tabs-core
+    -
+        id: sb-tab-accent
+        title: Active tab accent tint
+        description: Tint strength for the pill styles, from neutral to more colorful.
+        type: variable-number-slider
+        min: 0
+        max: 40
+        step: 1
+        default: 10
+    -
+        id: sb-tab-indicator
+        title: Underline strength
+        description: Opacity of the accent underline.
+        type: variable-number-slider
+        min: 10
+        max: 100
+        step: 5
+        default: 80
+    -
+        id: sb-tab-radius
+        title: Active tab corner radius
+        type: variable-number-slider
+        min: 0
+        max: 16
+        step: 1
+        default: 6
+        format: px
+*/
+
+body {
+    --sb-tab-accent: 10;
+    --sb-tab-indicator: 80;
+    --sb-tab-radius: 6px;
+}
+
+/* Restrict these states to sidebar tabs; top-level document tabs are untouched. */
+body:is(.sb-tabs-soft, .sb-tabs-accent, .sb-tabs-underline)
+    .workspace-split:is(.mod-left-split, .mod-right-split)
+    .workspace-tab-header.is-active {
+    background-color: transparent !important;
+}
+
+body:is(.sb-tabs-soft, .sb-tabs-accent, .sb-tabs-underline)
+    .workspace-split:is(.mod-left-split, .mod-right-split)
+    .workspace-tab-header.is-active .workspace-tab-header-inner {
+    border-radius: var(--sb-tab-radius) !important;
+}
+
+body.sb-tabs-soft
+    .workspace-split:is(.mod-left-split, .mod-right-split)
+    .workspace-tab-header.is-active .workspace-tab-header-inner {
+    background: color-mix(
+        in srgb,
+        var(--interactive-accent) calc(var(--sb-tab-accent) * 1%),
+        var(--background-primary)
+    ) !important;
+    box-shadow: inset 0 0 0 1px var(--background-modifier-border) !important;
+}
+
+body.sb-tabs-accent
+    .workspace-split:is(.mod-left-split, .mod-right-split)
+    .workspace-tab-header.is-active .workspace-tab-header-inner {
+    background: color-mix(
+        in srgb,
+        var(--interactive-accent) calc(max(var(--sb-tab-accent), 18) * 1%),
+        var(--background-primary)
+    ) !important;
+    box-shadow: inset 0 0 0 1px color-mix(
+        in srgb,
+        var(--interactive-accent) 35%,
+        var(--background-modifier-border)
+    ) !important;
+}
+
+body.sb-tabs-underline
+    .workspace-split:is(.mod-left-split, .mod-right-split)
+    .workspace-tab-header.is-active {
+    position: relative !important;
+}
+
+body.sb-tabs-underline
+    .workspace-split:is(.mod-left-split, .mod-right-split)
+    .workspace-tab-header.is-active .workspace-tab-header-inner {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+body.sb-tabs-underline
+    .workspace-split:is(.mod-left-split, .mod-right-split)
+    .workspace-tab-header.is-active::after {
+    content: "" !important;
+    position: absolute !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: 1px !important;
+    display: block !important;
+    width: 34px !important;
+    height: 4px !important;
+    transform: translateY(110%) translateX(-25%) !important;
+    background: color-mix(
+        in srgb,
+        var(--interactive-accent) calc(var(--sb-tab-indicator) * 1%),
+        transparent
+    ) !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    pointer-events: none !important;
+}

@@ -1,0 +1,192 @@
+/* @settings
+name: Active Line Highlight
+id: active-line-highlight
+settings:
+    -
+        id: line-color-heading
+        title: Color
+        type: heading
+        level: 2
+    -
+        id: use-custom-line-color
+        title: Use Custom Color Instead of Accent Color
+        description: When enabled, uses the manual color picker below instead of the vault accent color. Applies to the background highlight and the gutter marker.
+        type: class-toggle
+        default: false
+    -
+        id: active-line-custom-color
+        title: Custom Color
+        description: Applied when "Use Custom Color" is enabled.
+        type: variable-color
+        format: hex
+        default: '#7c3aed'
+    -
+        id: line-bg-heading
+        title: Background Options
+        type: heading
+        level: 2
+    -
+        id: enable-line-bg
+        title: Enable Background Highlight
+        description: Toggle background tinting on or off. Turn off if you only want the gutter marker; the brightness, full-width, and corner radius options below then have no effect.
+        type: class-toggle
+        default: true
+    -
+        id: active-line-opacity
+        title: Highlight Brightness / Intensity
+        description: Brightness / transparency of the active line background. Only applies while Background Highlight is on.
+        type: variable-number-slider
+        default: 0.12
+        min: 0.02
+        max: 0.60
+        step: 0.01
+    -
+        id: active-line-full-width
+        title: Full-Width Background
+        description: Extends the active line highlight edge-to-edge across the editor pane instead of clipping to text width. Only applies while Background Highlight is on.
+        type: class-toggle
+        default: false
+    -
+        id: active-line-radius
+        title: Highlight Corner Radius
+        description: Roundness of the line highlight corners. Only applies while Background Highlight is on, and only with the text-width (non full-width) highlight.
+        type: variable-number-slider
+        default: 4
+        min: 0
+        max: 12
+        step: 1
+        format: px
+    -
+        id: gutter-marker-heading
+        title: Gutter Indicator (Mutually Exclusive)
+        type: heading
+        level: 2
+    -
+        id: gutter-marker-style
+        title: Gutter Marker
+        description: Choose a gutter line, a gutter dot, or none (never both).
+        type: class-select
+        default: gutter-marker-none
+        options:
+            -
+                label: None
+                value: gutter-marker-none
+            -
+                label: Accent Line in Gutter
+                value: gutter-marker-line
+            -
+                label: Accent Dot in Gutter
+                value: gutter-marker-dot
+    -
+        id: gutter-line-width
+        title: Gutter Line Thickness
+        description: Width of the vertical accent line in the gutter. Only applies while the Accent Line marker is selected.
+        type: variable-number-slider
+        default: 3
+        min: 1
+        max: 10
+        step: 1
+        format: px
+    -
+        id: gutter-dot-size
+        title: Gutter Dot Size
+        description: Diameter of the accent dot in the gutter. Only applies while the Accent Dot marker is selected.
+        type: variable-number-slider
+        default: 6
+        min: 2
+        max: 16
+        step: 1
+        format: px
+*/
+
+/* ==========================================================
+   1. CORE VARIABLES & COLOR MIXING
+   ========================================================== */
+body {
+    --active-line-opacity: 0.12;
+    --active-line-custom-color: #7c3aed;
+    --active-line-radius: 4px;
+    --gutter-line-width: 3px;
+    --gutter-dot-size: 6px;
+
+    /* Base color derived from vault accent color */
+    --active-line-base-color: var(--interactive-accent);
+    --active-line-bg: color-mix(in srgb, var(--active-line-base-color) calc(var(--active-line-opacity) * 100%), transparent);
+}
+
+body.use-custom-line-color {
+    --active-line-base-color: var(--active-line-custom-color);
+    --active-line-bg: color-mix(in srgb, var(--active-line-base-color) calc(var(--active-line-opacity) * 100%), transparent);
+}
+
+/* Neutralize Obsidian / CodeMirror default line highlight so it doesn't double-tint */
+.cm-activeLine {
+    background-color: transparent !important;
+}
+
+/* ==========================================================
+   2. BACKGROUND HIGHLIGHT (Scaffolded by Toggles)
+   ========================================================== */
+/* NOTE: every rule below is intentionally gated on body.enable-line-bg.
+   When "Enable Background Highlight" is off, the brightness / full-width /
+   corner radius settings must have NO effect (Style Settings 1.0.9 cannot
+   gray out dependent controls, so the settings descriptions carry that
+   warning instead). Do not "simplify" this gate away. */
+/* Text-width highlight (default when enabled) */
+body.enable-line-bg:not(.active-line-full-width) .cm-line.cm-active {
+    background-color: var(--active-line-bg) !important;
+    border-radius: var(--active-line-radius) !important;
+    transition: background-color 0.12s ease;
+}
+
+/* Full-width highlight: targets the outer CM6 row container */
+body.enable-line-bg.active-line-full-width .cm-activeLine {
+    background-color: var(--active-line-bg) !important;
+    transition: background-color 0.12s ease;
+}
+
+body.enable-line-bg.active-line-full-width .cm-line.cm-active {
+    background-color: transparent !important;
+}
+
+/* ==========================================================
+   3. GUTTER MARKERS (Line OR Dot - Sized via CSS Variables)
+   ========================================================== */
+.cm-line.cm-active {
+    position: relative;
+}
+
+/* Option A: Vertical Line in Gutter */
+body.gutter-marker-line .cm-line.cm-active::before {
+    content: "";
+    position: absolute;
+    left: calc(-12px - (var(--gutter-line-width) / 2));
+    top: -1px;
+    bottom: -1px;
+    width: var(--gutter-line-width) !important;
+    background-color: var(--active-line-base-color) !important;
+    border-radius: 99px;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Option B: Accent Dot in Gutter */
+body.gutter-marker-dot .cm-line.cm-active::before {
+    content: "";
+    position: absolute;
+    left: calc(-12px - (var(--gutter-dot-size) / 2));
+    top: 50%;
+    transform: translateY(-50%);
+    width: var(--gutter-dot-size) !important;
+    height: var(--gutter-dot-size) !important;
+    background-color: var(--active-line-base-color) !important;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Fallback / Option None */
+body.gutter-marker-none .cm-line.cm-active::before {
+    content: none !important;
+    display: none !important;
+}

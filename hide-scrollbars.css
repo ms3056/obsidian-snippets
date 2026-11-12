@@ -1,0 +1,18 @@
+/* ==========================================================
+   HIDE ALL SCROLLBARS APP-WIDE (Modern Obsidian v1.5+)
+   ========================================================== */
+
+body *,
+body ::-webkit-scrollbar {
+    scrollbar-width: none !important; /* Hides scrollbars in modern engines */
+}
+
+body ::-webkit-scrollbar,
+body ::-webkit-scrollbar-track,
+body ::-webkit-scrollbar-thumb,
+body ::-webkit-scrollbar-corner {
+    width: 0px !important;
+    height: 0px !important;
+    background: transparent !important;
+    display: none !important;
+}

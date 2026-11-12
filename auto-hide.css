@@ -1,0 +1,1273 @@
+/* @settings
+name: Auto Hide
+id: hover-hide-all-bars
+settings:
+    -
+        id: hide-toggles-heading
+        title: Disable Auto-Hide Per Element
+        type: heading
+        level: 2
+    -
+        id: disable-hide-editor-tabs
+        title: Disable Auto-Hide - Main Editor Tab Bars
+        type: class-toggle
+        default: false
+    -
+        id: disable-hide-left-sidebar-tabs
+        title: Disable Auto-Hide - Left Sidebar Tab Bars
+        type: class-toggle
+        default: false
+    -
+        id: disable-hide-right-sidebar-tabs
+        title: Disable Auto-Hide - Right Sidebar Tab Bars
+        type: class-toggle
+        default: false
+    -
+        id: disable-hide-nav-header
+        title: Disable Auto-Hide - Sidebar Toolbars (.nav-header)
+        type: class-toggle
+        default: false
+    -
+        id: disable-hide-view-header
+        title: Disable Auto-Hide - Note Breadcrumb Bar (.view-header)
+        type: class-toggle
+        default: false
+    -
+        id: disable-hide-left-ribbon
+        title: Disable Auto-Hide - Left Ribbon Menu
+        type: class-toggle
+        default: false
+    -
+        id: disable-hide-vault-profile
+        title: Disable Auto-Hide - Vault Profile / Help / Settings Bar
+        type: class-toggle
+        default: false
+    -
+        id: disable-hide-status-bar
+        title: Disable Auto-Hide - Bottom Status Bar
+        type: class-toggle
+        default: false
+    -
+        id: pill-dimensions-heading
+        title: Placeholder Pill Appearance
+        type: heading
+        level: 2
+    -
+        id: pill-color-mode
+        title: Pill Color Mode
+        description: Choose the default text-faint color, a tinted accent pill, or a fully custom color.
+        type: class-select
+        default: pill-color-default
+        options:
+            -
+                label: Default (Text Faint)
+                value: pill-color-default
+            -
+                label: Accent Color
+                value: pill-color-accent
+            -
+                label: Custom Color
+                value: pill-color-custom
+    -
+        id: pill-accent-intensity
+        title: Accent Color Intensity
+        description: Strength of the accent tint used when Pill Color Mode is set to Accent Color.
+        type: variable-number-slider
+        default: 0.55
+        min: 0.05
+        max: 1
+        step: 0.05
+    -
+        id: pill-custom-color
+        title: Custom Pill Color
+        description: Used when Pill Color Mode is set to Custom Color.
+        type: variable-color
+        format: hex
+        default: '#7c3aed'
+    -
+        id: pill-width
+        title: Pill Length
+        type: variable-number-slider
+        default: 38
+        min: 16
+        max: 80
+        step: 2
+        format: px
+    -
+        id: pill-thickness
+        title: Pill Thickness
+        type: variable-number-slider
+        default: 4
+        min: 2
+        max: 8
+        step: 1
+        format: px
+    -
+        id: collapsed-bar-size
+        title: Collapsed Hover Zone Thickness
+        description: Height or width of the collapsed bar containing the placeholder pill
+        type: variable-number-slider
+        default: 16
+        min: 12
+        max: 28
+        step: 1
+        format: px
+    -
+        id: pill-opacity
+        title: Pill Resting Opacity
+        type: variable-number-slider
+        default: 0.45
+        min: 0.1
+        max: 0.9
+        step: 0.05
+*/
+
+body {
+  --octarine-auto-hide-snippet-active: 1;
+  --pill-width: 38px;
+  --pill-thickness: 4px;
+  --collapsed-bar-size: 16px;
+  --pill-opacity: 0.45;
+  --pill-accent-intensity: 0.55;
+  --pill-custom-color: #7c3aed;
+  --pill-color-default: var(--text-faint);
+  --pill-color: var(--pill-color-default);
+  --expand-ease: 0.22s 0.07s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --collapse-ease: 0.3s 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --tab-collapse-ease: 0.3s 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+body.pill-color-accent {
+  --pill-color: color-mix(
+    in srgb,
+    var(--interactive-accent) calc(var(--pill-accent-intensity) * 100%),
+    transparent
+  );
+}
+
+body.pill-color-custom {
+  --pill-color: var(--pill-custom-color);
+}
+
+/* ==========================================================
+   CRITICAL FIX: REMOVE OBSIDIAN'S TOP-LEFT RIBBON COLOR PATCH
+   ========================================================== */
+/* Completely remove Obsidian's top-left titlebar color box on .workspace-ribbon.mod-primary::before */
+.workspace-ribbon::before,
+.workspace-ribbon.mod-primary::before,
+.workspace-ribbon.mod-left::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* ==========================================================
+   DRAG: OBSIDIAN CORE HANDLES IT — DO NOT OVERRIDE.
+   In hidden-frameless mode Obsidian's own CSS makes the top
+   (mod-top) tab header containers, their inner, and the spacer
+   -webkit-app-region: drag, while tabs/new-tab/tab-list/toggle
+   buttons are no-drag islands. That built-in drag survives the
+   auto-hide collapse (the 16px band stays draggable — the
+   "space" at the very top), and it works when expanded too.
+   Border theme relies on exactly this and ships zero drag CSS.
+   Marking .workspace-tab-header-container or its inner no-drag
+   kills the built-in drag (grab cursor appears, nothing moves).
+   Only the titlebar and its native controls are explicitly no-drag.
+   ========================================================== */
+
+/* ==========================================================
+   A. TAB BARS (Editor, Left Split, Right Split + Native Toggle Button)
+   ========================================================== */
+body:not(.disable-hide-editor-tabs)
+  .workspace-split.mod-root
+  .workspace-tab-header-container,
+body:not(.disable-hide-left-sidebar-tabs)
+  .workspace-split.mod-left-split
+  .workspace-tab-header-container,
+body:not(.disable-hide-right-sidebar-tabs)
+  .workspace-split.mod-right-split
+  .workspace-tab-header-container {
+  position: relative !important;
+  height: var(--collapsed-bar-size) !important;
+  min-height: var(--collapsed-bar-size) !important;
+  background-color: var(--background-primary) !important;
+  border-bottom: 1px solid transparent !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  transition:
+    height var(--collapse-ease),
+    min-height var(--collapse-ease),
+    background-color var(--collapse-ease),
+    border-color var(--collapse-ease) !important;
+  overflow: hidden !important;
+  z-index: 30 !important;
+}
+
+/* WINDOWS ONLY: the 108px top-right reservation exists for the native
+   min/max/close buttons (Windows). macOS has no buttons there (traffic
+   lights are top-left), so all of this is gated behind body.mod-windows. */
+body.mod-windows:not(.is-mobile):not(.is-fullscreen) {
+  --auto-hide-controls-width: 108px;
+}
+
+/* Reserve control space only in the top right pane, outside its OS drag region. */
+body.mod-windows:not(.is-mobile):not(.is-fullscreen)
+  .workspace-tabs.mod-top-right-space
+  .workspace-tab-header-container,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):has(
+    .workspace-split.mod-right-split.is-sidedock-collapsed
+  )
+  .workspace-split.mod-root
+  .workspace-tabs.mod-top-right-space
+  .workspace-tab-header-container {
+  box-sizing: border-box !important;
+  width: calc(100% - var(--auto-hide-controls-width)) !important;
+  margin-right: var(--auto-hide-controls-width) !important;
+  padding-right: 0 !important;
+}
+
+/* Center-only override: the main editor tab bar holds longer before closing */
+body:not(.disable-hide-editor-tabs)
+  .workspace-split.mod-root
+  .workspace-tab-header-container {
+  transition:
+    height var(--tab-collapse-ease),
+    min-height var(--tab-collapse-ease),
+    background-color var(--tab-collapse-ease),
+    border-color var(--tab-collapse-ease) !important;
+}
+
+/* Hide internal tab elements & native sidebar toggle button when collapsed */
+body:not(.disable-hide-editor-tabs)
+  .workspace-split.mod-root
+  .workspace-tab-header-container
+  > *,
+body:not(.disable-hide-left-sidebar-tabs)
+  .workspace-split.mod-left-split
+  .workspace-tab-header-container
+  > *,
+body:not(.disable-hide-right-sidebar-tabs)
+  .workspace-split.mod-right-split
+  .workspace-tab-header-container
+  > * {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity var(--collapse-ease) !important;
+}
+
+body:not(.disable-hide-editor-tabs)
+  .workspace-split.mod-root
+  .workspace-tab-header-container
+  > * {
+  transition: opacity var(--tab-collapse-ease) !important;
+}
+
+/* Centered Horizontal Pill Placeholder */
+body:not(.disable-hide-editor-tabs)
+  .workspace-split.mod-root
+  .workspace-tab-header-container::after,
+body:not(.disable-hide-left-sidebar-tabs)
+  .workspace-split.mod-left-split
+  .workspace-tab-header-container::after,
+body:not(.disable-hide-right-sidebar-tabs)
+  .workspace-split.mod-right-split
+  .workspace-tab-header-container::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  bottom: auto !important;
+  right: auto !important;
+  transform: translate(-50%, -50%) !important;
+  width: var(--pill-width) !important;
+  height: var(--pill-thickness) !important;
+  background-color: var(--pill-color) !important;
+  border-radius: 99px !important;
+  opacity: var(--pill-opacity) !important;
+  transition:
+    opacity var(--collapse-ease),
+    width var(--collapse-ease) !important;
+  pointer-events: none !important;
+  z-index: 35 !important;
+}
+
+body:not(.disable-hide-editor-tabs)
+  .workspace-split.mod-root
+  .workspace-tab-header-container::after {
+  transition:
+    opacity var(--tab-collapse-ease),
+    width var(--tab-collapse-ease) !important;
+}
+
+/* Shift the top-right pill out from under the Windows control buttons (Windows only) */
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-right-sidebar-tabs
+  )
+  .workspace-tabs.mod-top-right-space
+  .workspace-tab-header-container::after,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-editor-tabs
+  ):has(.workspace-split.mod-right-split.is-sidedock-collapsed)
+  .workspace-split.mod-root
+  .workspace-tabs.mod-top-right-space
+  .workspace-tab-header-container::after {
+  left: calc(50% + (var(--auto-hide-controls-width, 108px) / 2)) !important;
+}
+
+/* Smoothly Expand Tab Bar on Hover, Focus, or when Dragging a Tab */
+body:not(.disable-hide-editor-tabs)
+  .workspace-split.mod-root
+  .workspace-tab-header-container:is(:hover, :focus-within),
+body:not(.disable-hide-left-sidebar-tabs)
+  .workspace-split.mod-left-split
+  .workspace-tab-header-container:is(:hover, :focus-within),
+body:not(.disable-hide-right-sidebar-tabs)
+  .workspace-split.mod-right-split
+  .workspace-tab-header-container:is(:hover, :focus-within),
+body.is-grabbing .workspace-tabs:hover > .workspace-tab-header-container {
+  height: var(--header-height, 40px) !important;
+  min-height: var(--header-height, 40px) !important;
+  background-color: var(--background-secondary) !important;
+  border-bottom: 1px solid var(--background-modifier-border) !important;
+  transition:
+    height var(--expand-ease),
+    min-height var(--expand-ease),
+    background-color var(--expand-ease),
+    border-color var(--expand-ease) !important;
+  z-index: 60 !important;
+}
+
+/* WINDOWS ONLY: hovering the native min/max/close buttons or the titlebar
+   strip expands the tab bars. macOS has no right-side titlebar buttons and
+   the traffic lights live top-left, so these triggers stay on Windows. */
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-right-sidebar-tabs
+  ):has(.titlebar-button-container.mod-right:hover)
+  .workspace-tabs.mod-top-right-space
+  .workspace-tab-header-container,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-editor-tabs
+  ):has(.workspace-split.mod-right-split.is-sidedock-collapsed):has(
+    .titlebar-button-container.mod-right:hover
+  )
+  .workspace-split.mod-root
+  .workspace-tabs.mod-top-right-space
+  .workspace-tab-header-container,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-editor-tabs
+  ):has(> .titlebar:hover):not(:has(.titlebar-button-container.mod-right:hover))
+  .workspace-split.mod-root
+  .workspace-tab-header-container,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-left-sidebar-tabs
+  ):has(> .titlebar:hover):not(:has(.titlebar-button-container.mod-right:hover))
+  .workspace-split.mod-left-split
+  .workspace-tab-header-container,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-right-sidebar-tabs
+  ):has(> .titlebar:hover):not(:has(.titlebar-button-container.mod-right:hover))
+  .workspace-split.mod-right-split
+  .workspace-tab-header-container {
+  height: var(--header-height, 40px) !important;
+  min-height: var(--header-height, 40px) !important;
+  background-color: var(--background-secondary) !important;
+  border-bottom: 1px solid var(--background-modifier-border) !important;
+  transition:
+    height var(--expand-ease),
+    min-height var(--expand-ease),
+    background-color var(--expand-ease),
+    border-color var(--expand-ease) !important;
+  z-index: 60 !important;
+}
+
+body:not(.is-mobile):not(.is-fullscreen).disable-hide-right-sidebar-tabs:has(
+    .workspace-split.mod-right-split:not(.is-sidedock-collapsed)
+  )
+  .workspace-split.mod-right-split
+  .workspace-tab-header-container,
+body:not(.is-mobile):not(.is-fullscreen).disable-hide-editor-tabs:has(
+    .workspace-split.mod-right-split.is-sidedock-collapsed
+  )
+  .workspace-split.mod-root
+  .workspace-tab-header-container {
+  height: var(--header-height, 40px) !important;
+  min-height: var(--header-height, 40px) !important;
+  background-color: var(--background-secondary) !important;
+  border-bottom: 1px solid var(--background-modifier-border) !important;
+}
+
+body:not(.disable-hide-editor-tabs)
+  .workspace-split.mod-root
+  .workspace-tab-header-container:is(:hover, :focus-within)
+  > *,
+body:not(.disable-hide-left-sidebar-tabs)
+  .workspace-split.mod-left-split
+  .workspace-tab-header-container:is(:hover, :focus-within)
+  > *,
+body:not(.disable-hide-right-sidebar-tabs)
+  .workspace-split.mod-right-split
+  .workspace-tab-header-container:is(:hover, :focus-within)
+  > *,
+body.is-grabbing .workspace-tabs:hover > .workspace-tab-header-container > * {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transition: opacity var(--expand-ease) !important;
+}
+
+/* WINDOWS ONLY: reveal children when the native titlebar controls are hovered */
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-right-sidebar-tabs
+  ):has(.titlebar-button-container.mod-right:hover)
+  .workspace-tabs.mod-top-right-space
+  .workspace-tab-header-container
+  > *,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-editor-tabs
+  ):has(.workspace-split.mod-right-split.is-sidedock-collapsed):has(
+    .titlebar-button-container.mod-right:hover
+  )
+  .workspace-split.mod-root
+  .workspace-tabs.mod-top-right-space
+  .workspace-tab-header-container
+  > *,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-editor-tabs
+  ):has(> .titlebar:hover):not(:has(.titlebar-button-container.mod-right:hover))
+  .workspace-split.mod-root
+  .workspace-tab-header-container
+  > *,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-left-sidebar-tabs
+  ):has(> .titlebar:hover):not(:has(.titlebar-button-container.mod-right:hover))
+  .workspace-split.mod-left-split
+  .workspace-tab-header-container
+  > *,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-right-sidebar-tabs
+  ):has(> .titlebar:hover):not(:has(.titlebar-button-container.mod-right:hover))
+  .workspace-split.mod-right-split
+  .workspace-tab-header-container
+  > * {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transition: opacity var(--expand-ease) !important;
+}
+
+body:not(.disable-hide-editor-tabs)
+  .workspace-split.mod-root
+  .workspace-tab-header-container:is(:hover, :focus-within)::after,
+body:not(.disable-hide-left-sidebar-tabs)
+  .workspace-split.mod-left-split
+  .workspace-tab-header-container:is(:hover, :focus-within)::after,
+body:not(.disable-hide-right-sidebar-tabs)
+  .workspace-split.mod-right-split
+  .workspace-tab-header-container:is(:hover, :focus-within)::after,
+body.is-grabbing
+  .workspace-tabs:hover
+  > .workspace-tab-header-container::after {
+  opacity: 0 !important;
+  width: calc(var(--pill-width) * 1.6) !important;
+  transition:
+    opacity var(--expand-ease),
+    width var(--expand-ease) !important;
+}
+
+/* WINDOWS ONLY: fade the pill when the native titlebar controls are hovered */
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-right-sidebar-tabs
+  ):has(.titlebar-button-container.mod-right:hover)
+  .workspace-tabs.mod-top-right-space
+  .workspace-tab-header-container::after,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-editor-tabs
+  ):has(.workspace-split.mod-right-split.is-sidedock-collapsed):has(
+    .titlebar-button-container.mod-right:hover
+  )
+  .workspace-split.mod-root
+  .workspace-tabs.mod-top-right-space
+  .workspace-tab-header-container::after,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-editor-tabs
+  ):has(> .titlebar:hover):not(:has(.titlebar-button-container.mod-right:hover))
+  .workspace-split.mod-root
+  .workspace-tab-header-container::after,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-left-sidebar-tabs
+  ):has(> .titlebar:hover):not(:has(.titlebar-button-container.mod-right:hover))
+  .workspace-split.mod-left-split
+  .workspace-tab-header-container::after,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    .disable-hide-right-sidebar-tabs
+  ):has(> .titlebar:hover):not(:has(.titlebar-button-container.mod-right:hover))
+  .workspace-split.mod-right-split
+  .workspace-tab-header-container::after {
+  opacity: 0 !important;
+  width: calc(var(--pill-width) * 1.6) !important;
+  transition:
+    opacity var(--expand-ease),
+    width var(--expand-ease) !important;
+}
+
+/* ==========================================================
+   B. SIDEBAR PANEL ACTION TOOLBARS (.nav-header inside Files/Search/Tags/Git)
+   ========================================================== */
+body:not(.disable-hide-nav-header) .workspace-leaf-content .nav-header {
+  position: relative !important;
+  height: calc(var(--collapsed-bar-size) - 4px) !important;
+  min-height: calc(var(--collapsed-bar-size) - 4px) !important;
+  padding: 0 !important;
+  margin: 2px 0 0 0 !important;
+  overflow: hidden !important;
+  transition:
+    height var(--collapse-ease),
+    min-height var(--collapse-ease),
+    padding var(--collapse-ease) !important;
+  z-index: 10;
+}
+
+body:not(.disable-hide-nav-header) .workspace-leaf-content .nav-header > * {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity var(--collapse-ease) !important;
+}
+
+body:not(.disable-hide-nav-header) .workspace-leaf-content .nav-header::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(var(--pill-width) * 0.55);
+  height: max(2px, calc(var(--pill-thickness) - 1px));
+  background-color: var(--pill-color);
+  border-radius: 99px;
+  opacity: calc(var(--pill-opacity) * 0.55);
+  transition:
+    opacity var(--collapse-ease),
+    width var(--collapse-ease);
+  pointer-events: none;
+}
+
+body:not(.disable-hide-nav-header)
+  .workspace-leaf-content
+  .nav-header:is(:hover, :focus-within) {
+  height: auto !important;
+  min-height: 34px !important;
+  padding: 4px 8px !important;
+  transition:
+    height var(--expand-ease),
+    min-height var(--expand-ease),
+    padding var(--expand-ease) !important;
+}
+
+body:not(.disable-hide-nav-header)
+  .workspace-leaf-content
+  .nav-header:is(:hover, :focus-within)
+  > * {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transition: opacity var(--expand-ease) !important;
+}
+
+body:not(.disable-hide-nav-header)
+  .workspace-leaf-content
+  .nav-header:is(:hover, :focus-within)::after {
+  opacity: 0 !important;
+  transition: opacity var(--expand-ease) !important;
+}
+
+/* ==========================================================
+   C. NOTE VIEW HEADER / BREADCRUMB BAR (.view-header)
+   ========================================================== */
+body:not(.disable-hide-view-header) .workspace-leaf-content .view-header {
+  position: relative !important;
+  height: calc(var(--collapsed-bar-size) - 4px) !important;
+  min-height: calc(var(--collapsed-bar-size) - 4px) !important;
+  margin-top: 2px !important;
+  background-color: var(--background-primary) !important;
+  border-bottom: 1px solid transparent !important;
+  transition:
+    height var(--collapse-ease),
+    min-height var(--collapse-ease),
+    border-color var(--collapse-ease) !important;
+  overflow: hidden !important;
+  z-index: 10;
+}
+
+body:not(.disable-hide-view-header) .workspace-leaf-content .view-header > * {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity var(--collapse-ease) !important;
+}
+
+body:not(.disable-hide-view-header)
+  .workspace-leaf-content
+  .view-header::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(var(--pill-width) * 0.6);
+  height: max(2px, calc(var(--pill-thickness) - 1px));
+  background-color: var(--pill-color);
+  border-radius: 99px;
+  opacity: calc(var(--pill-opacity) * 0.6);
+  transition:
+    opacity var(--collapse-ease),
+    width var(--collapse-ease);
+  pointer-events: none;
+}
+
+body:not(.disable-hide-view-header)
+  .workspace-leaf-content
+  .view-header:is(:hover, :focus-within) {
+  height: var(--header-height, 40px) !important;
+  min-height: var(--header-height, 40px) !important;
+  border-bottom: 1px solid var(--background-modifier-border) !important;
+  transition:
+    height var(--expand-ease),
+    min-height var(--expand-ease),
+    border-color var(--expand-ease) !important;
+}
+
+body:not(.disable-hide-view-header)
+  .workspace-leaf-content
+  .view-header:is(:hover, :focus-within)
+  > * {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transition: opacity var(--expand-ease) !important;
+}
+
+body:not(.disable-hide-view-header)
+  .workspace-leaf-content
+  .view-header:is(:hover, :focus-within)::after {
+  opacity: 0 !important;
+  width: var(--pill-width);
+  transition:
+    opacity var(--expand-ease),
+    width var(--expand-ease);
+}
+
+/* ==========================================================
+   D. LEFT RIBBON MENU (.workspace-ribbon.mod-primary)
+   NOTE: deliberately NO :not(.is-collapsed) gate. Obsidian adds
+   .is-collapsed to the primary ribbon when the left panel is
+   collapsed via the toggle; gating on it would disable this whole
+   section exactly when the panel is closed, leaving the ribbon
+   stuck fully open. The auto-hide pill must work in both panel
+   states.
+   ========================================================== */
+/* Collapse the ribbon container down to a clean vertical pill strip */
+body:not(.disable-hide-left-ribbon)
+  .workspace-ribbon:is(.mod-primary, .mod-left) {
+  --ribbon-width: var(--collapsed-bar-size) !important;
+  position: relative !important;
+  flex: 0 0 var(--collapsed-bar-size) !important;
+  width: var(--collapsed-bar-size) !important;
+  min-width: var(--collapsed-bar-size) !important;
+  max-width: var(--collapsed-bar-size) !important;
+  padding: 0 !important;
+  border-right: none !important;
+  overflow: hidden !important;
+  pointer-events: auto !important;
+  transition:
+    flex-basis var(--collapse-ease),
+    width var(--collapse-ease),
+    min-width var(--collapse-ease),
+    max-width var(--collapse-ease),
+    padding var(--collapse-ease) !important;
+  z-index: 999 !important;
+}
+
+/* Completely hide all inner icon containers (.side-dock-actions & .side-dock-settings) when collapsed */
+body:not(.disable-hide-left-ribbon)
+  .workspace-ribbon:is(.mod-primary, .mod-left)
+  > * {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transition:
+    opacity var(--collapse-ease),
+    visibility var(--collapse-ease) !important;
+}
+
+/* Centered Vertical Pill Placeholder inside the Collapsed Ribbon */
+body:not(.disable-hide-left-ribbon)
+  .workspace-ribbon:is(.mod-primary, .mod-left)::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: var(--pill-thickness) !important;
+  height: var(--pill-width) !important;
+  background-color: var(--pill-color) !important;
+  border-radius: 99px !important;
+  opacity: var(--pill-opacity) !important;
+  transition:
+    opacity var(--collapse-ease),
+    height var(--collapse-ease) !important;
+  pointer-events: none !important;
+  z-index: 1000 !important;
+}
+
+/* Smoothly Expand Ribbon to 44px when Hovered */
+body:not(.disable-hide-left-ribbon)
+  .workspace-ribbon:is(.mod-primary, .mod-left):hover {
+  --ribbon-width: 44px !important;
+  flex: 0 0 44px !important;
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  padding: 36px 0 8px 0 !important;
+  transition:
+    flex-basis var(--expand-ease),
+    width var(--expand-ease),
+    min-width var(--expand-ease),
+    max-width var(--expand-ease),
+    padding var(--expand-ease) !important;
+}
+
+/* Reveal Ribbon Icons on Hover */
+body:not(.disable-hide-left-ribbon)
+  .workspace-ribbon:is(.mod-primary, .mod-left):hover
+  > * {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transition:
+    opacity var(--expand-ease),
+    visibility var(--expand-ease) !important;
+}
+
+/* Fade out vertical pill when expanded */
+body:not(.disable-hide-left-ribbon)
+  .workspace-ribbon:is(.mod-primary, .mod-left):hover::after {
+  opacity: 0 !important;
+  height: calc(var(--pill-width) * 1.6) !important;
+  transition:
+    opacity var(--expand-ease),
+    height var(--expand-ease) !important;
+}
+
+/* ==========================================================
+   E. VAULT PROFILE / HELP (?) / SETTINGS BAR (.workspace-sidedock-vault-profile)
+   ========================================================== */
+body:not(.disable-hide-vault-profile)
+  .workspace-split.mod-left-split
+  .workspace-sidedock-vault-profile {
+  position: relative !important;
+  height: var(--collapsed-bar-size) !important;
+  min-height: var(--collapsed-bar-size) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-top: 1px solid transparent !important;
+  transition:
+    height var(--collapse-ease),
+    min-height var(--collapse-ease),
+    padding var(--collapse-ease) !important;
+  z-index: 20;
+}
+
+body:not(.disable-hide-vault-profile)
+  .workspace-split.mod-left-split
+  .workspace-sidedock-vault-profile
+  > * {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity var(--collapse-ease) !important;
+}
+
+body:not(.disable-hide-vault-profile)
+  .workspace-split.mod-left-split
+  .workspace-sidedock-vault-profile::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: var(--pill-width) !important;
+  height: var(--pill-thickness) !important;
+  background-color: var(--pill-color) !important;
+  border-radius: 99px !important;
+  opacity: var(--pill-opacity) !important;
+  transition:
+    opacity var(--collapse-ease),
+    width var(--collapse-ease) !important;
+  pointer-events: none !important;
+}
+
+body:not(.disable-hide-vault-profile)
+  .workspace-split.mod-left-split
+  .workspace-sidedock-vault-profile:is(:hover, :focus-within) {
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 6px 12px !important;
+  transition:
+    height var(--expand-ease),
+    min-height var(--expand-ease),
+    padding var(--expand-ease) !important;
+}
+
+body:not(.disable-hide-vault-profile)
+  .workspace-split.mod-left-split
+  .workspace-sidedock-vault-profile:is(:hover, :focus-within)
+  > * {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transition: opacity var(--expand-ease) !important;
+}
+
+body:not(.disable-hide-vault-profile)
+  .workspace-split.mod-left-split
+  .workspace-sidedock-vault-profile:is(:hover, :focus-within)::after {
+  opacity: 0 !important;
+  width: calc(var(--pill-width) * 1.5) !important;
+  transition:
+    opacity var(--expand-ease),
+    width var(--expand-ease) !important;
+}
+
+/* ==========================================================
+   F. BOTTOM STATUS BAR (Floating Pill Placeholder)
+   ========================================================== */
+body:not(.disable-hide-status-bar) .status-bar {
+  position: fixed !important;
+  bottom: var(--card-gap, 8px) !important;
+  right: var(--card-gap, 8px) !important;
+  min-height: var(--collapsed-bar-size) !important;
+  height: var(--collapsed-bar-size) !important;
+  min-width: calc(var(--pill-width) + 20px) !important;
+  max-width: calc(var(--pill-width) + 20px) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  border-radius: 99px !important;
+  transition:
+    max-width 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+    height var(--collapse-ease),
+    padding var(--collapse-ease),
+    border-radius var(--collapse-ease) !important;
+  z-index: 40;
+}
+
+body:not(.disable-hide-status-bar) .status-bar > * {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity var(--collapse-ease) !important;
+}
+
+body:not(.disable-hide-status-bar) .status-bar::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--pill-width);
+  height: var(--pill-thickness);
+  background-color: var(--pill-color);
+  border-radius: 99px;
+  opacity: var(--pill-opacity);
+  transition:
+    opacity var(--collapse-ease),
+    width var(--collapse-ease);
+  pointer-events: none;
+}
+
+body:not(.disable-hide-status-bar) .status-bar:hover {
+  height: auto !important;
+  min-height: 28px !important;
+  max-width: 90vw !important;
+  padding: 4px 12px !important;
+  border-radius: calc(var(--card-radius, 12px) * 0.75) !important;
+  transition:
+    max-width 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+    height var(--expand-ease),
+    padding var(--expand-ease),
+    border-radius var(--expand-ease) !important;
+}
+
+body:not(.disable-hide-status-bar) .status-bar:hover > * {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transition: opacity var(--expand-ease) !important;
+}
+
+body:not(.disable-hide-status-bar) .status-bar:hover::after {
+  opacity: 0 !important;
+  width: calc(var(--pill-width) * 1.5);
+  transition:
+    opacity var(--expand-ease),
+    width var(--expand-ease);
+}
+
+/* WINDOWS ONLY: keep the titlebar click-through while exposing a no-drag
+   controls strip for the native min/max/close buttons. macOS has no
+   right-side titlebar controls, so the whole strip logic below applies
+   only when body.mod-windows is present. Leave the native titlebar alone
+   while the Settings modal is open. */
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    :has(.modal.mod-settings)
+  )
+  .titlebar {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 0 !important;
+  z-index: 9999 !important;
+  pointer-events: none !important;
+  -webkit-app-region: no-drag !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    :has(.modal.mod-settings)
+  )
+  .titlebar-button-container.mod-right {
+  position: fixed !important;
+  top: calc(var(--card-gap, 0px) + var(--card-border-width, 0px)) !important;
+  right: calc(var(--card-gap, 0px) + var(--card-border-width, 0px)) !important;
+  box-sizing: border-box !important;
+  width: var(--auto-hide-controls-width, 108px) !important;
+  height: var(--collapsed-bar-size) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  background-color: transparent !important;
+  border-top: none !important;
+  border-bottom: 1px solid transparent !important;
+  border-top-right-radius: max(
+    0px,
+    calc(var(--card-radius, 0px) - var(--card-border-width, 0px))
+  ) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  -webkit-app-region: no-drag !important;
+  z-index: 10000 !important;
+  transition:
+    height var(--collapse-ease),
+    background-color var(--collapse-ease),
+    border-color var(--collapse-ease) !important;
+}
+
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    :has(.modal.mod-settings)
+  )
+  .titlebar-button-container.mod-right
+  .titlebar-button {
+  height: 100% !important;
+  width: 36px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  -webkit-app-region: no-drag !important;
+  transition:
+    opacity var(--collapse-ease),
+    background-color 0.15s ease,
+    color 0.15s ease !important;
+}
+
+/* Match the editor tab bar's longer collapse delay when it occupies the top-right slot. */
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    :has(.modal.mod-settings)
+  ):not(
+    .disable-hide-editor-tabs
+  ):has(.workspace-split.mod-right-split.is-sidedock-collapsed):not(
+    :has(.titlebar-button-container.mod-right:hover)
+  ):not(
+    :has(
+      .workspace-split.mod-root
+        .workspace-tabs.mod-top-right-space
+        .workspace-tab-header-container:is(:hover, :focus-within)
+    )
+  )
+  .titlebar-button-container.mod-right {
+  transition:
+    height var(--tab-collapse-ease),
+    background-color var(--tab-collapse-ease),
+    border-color var(--tab-collapse-ease) !important;
+}
+
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    :has(.modal.mod-settings)
+  ):not(
+    .disable-hide-editor-tabs
+  ):has(.workspace-split.mod-right-split.is-sidedock-collapsed):not(
+    :has(.titlebar-button-container.mod-right:hover)
+  ):not(
+    :has(
+      .workspace-split.mod-root
+        .workspace-tabs.mod-top-right-space
+        .workspace-tab-header-container:is(:hover, :focus-within)
+    )
+  )
+  .titlebar-button-container.mod-right
+  .titlebar-button {
+  transition:
+    opacity var(--tab-collapse-ease),
+    background-color 0.15s ease,
+    color 0.15s ease !important;
+}
+
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    :has(.modal.mod-settings)
+  )
+  .titlebar-button-container.mod-right:hover,
+body.mod-windows:not(.is-mobile):not(:has(.modal.mod-settings)):not(
+    .is-fullscreen
+  ).disable-hide-right-sidebar-tabs:has(
+    .workspace-split.mod-right-split:not(.is-sidedock-collapsed)
+  )
+  .titlebar-button-container.mod-right,
+body.mod-windows:not(.is-mobile):not(:has(.modal.mod-settings)):not(
+    .is-fullscreen
+  ).disable-hide-editor-tabs:has(
+    .workspace-split.mod-right-split.is-sidedock-collapsed
+  )
+  .titlebar-button-container.mod-right,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    :has(.modal.mod-settings)
+  ):has(
+    .workspace-tabs.mod-top-right-space
+      .workspace-tab-header-container:is(:hover, :focus-within)
+  )
+  .titlebar-button-container.mod-right,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    :has(.modal.mod-settings)
+  ):has(
+    .workspace-split.mod-right-split.is-sidedock-collapsed
+  ):has(
+    .workspace-split.mod-root
+      .workspace-tabs.mod-top-right-space
+      .workspace-tab-header-container:is(:hover, :focus-within)
+  )
+  .titlebar-button-container.mod-right {
+  height: var(--header-height, 40px) !important;
+  background-color: var(--background-secondary) !important;
+  border-bottom: 1px solid var(--background-modifier-border) !important;
+  pointer-events: auto !important;
+  -webkit-app-region: no-drag !important;
+  transition:
+    height var(--expand-ease),
+    background-color var(--expand-ease),
+    border-color var(--expand-ease) !important;
+}
+
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    :has(.modal.mod-settings)
+  )
+  .titlebar-button-container.mod-right:hover
+  .titlebar-button,
+body.mod-windows:not(.is-mobile):not(:has(.modal.mod-settings)):not(
+    .is-fullscreen
+  ).disable-hide-right-sidebar-tabs:has(
+    .workspace-split.mod-right-split:not(.is-sidedock-collapsed)
+  )
+  .titlebar-button-container.mod-right
+  .titlebar-button,
+body.mod-windows:not(.is-mobile):not(:has(.modal.mod-settings)):not(
+    .is-fullscreen
+  ).disable-hide-editor-tabs:has(
+    .workspace-split.mod-right-split.is-sidedock-collapsed
+  )
+  .titlebar-button-container.mod-right
+  .titlebar-button,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    :has(.modal.mod-settings)
+  ):has(
+    .workspace-tabs.mod-top-right-space
+      .workspace-tab-header-container:is(:hover, :focus-within)
+  )
+  .titlebar-button-container.mod-right
+  .titlebar-button,
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    :has(.modal.mod-settings)
+  ):has(
+    .workspace-split.mod-right-split.is-sidedock-collapsed
+  ):has(
+    .workspace-split.mod-root
+      .workspace-tabs.mod-top-right-space
+      .workspace-tab-header-container:is(:hover, :focus-within)
+  )
+  .titlebar-button-container.mod-right
+  .titlebar-button {
+  height: var(--header-height, 40px) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  -webkit-app-region: no-drag !important;
+  cursor: pointer !important;
+  transition:
+    opacity var(--expand-ease),
+    background-color 0.15s ease,
+    color 0.15s ease !important;
+}
+
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    :has(.modal.mod-settings)
+  )
+  .titlebar-button-container.mod-right
+  .titlebar-button:hover {
+  background-color: var(--background-modifier-hover) !important;
+  color: var(--text-normal) !important;
+}
+
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    :has(.modal.mod-settings)
+  )
+  .titlebar-button-container.mod-right
+  .titlebar-button.mod-close:hover {
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    :has(.modal.mod-settings)
+  )
+  .titlebar-button-container.mod-right
+  .titlebar-button.mod-close {
+  border-top-right-radius: max(
+    0px,
+    calc(var(--card-radius, 0px) - var(--card-border-width, 0px))
+  ) !important;
+}
+
+body.mod-windows:not(.is-mobile):not(.is-fullscreen):not(
+    :has(.modal.mod-settings)
+  )
+  .titlebar-button-container.mod-right
+  .titlebar-button
+  svg {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: none !important;
+}
+
+/* ==========================================================
+   RIGHT-SIDEBAR TOGGLE ALIGNMENT (cosmetic, two states)
+   EXPANDED bar: core gives the toggle full bar height + its own
+   padding, so its icon floats off the tab-icon line.
+   COLLAPSED dock: same toggle lands IN the root tab bar — key the
+   nudge off its parent (.workspace-split.mod-root container).
+   Tune each pair of translate values independently.
+   ========================================================== */
+body:not(.disable-hide-right-sidebar-tabs)
+  .workspace-split.mod-right-split
+  .sidebar-toggle-button.mod-right {
+  transform: translate(-20px, 0);
+}
+
+/* macOS: core fixes .sidebar-toggle-button.mod-secondary to
+   position:fixed; top:0 — it floats at the very top of the window. On
+   Windows the titlebar strip absorbed that; on Mac there is no titlebar
+   there, so the toggle's opaque box hung over the card-gap canvas above
+   the card (and the card's top border). Re-anchor the box to start at the
+   card's top edge (gap + 2px clears the border line) and keep it inside
+   the expanded bar; the icon is lowered via padding, independently of box
+   position (tune the 14px here; the 2px and bottom stay). */
+body.mod-macos:not(.disable-hide-right-sidebar-tabs)
+  .workspace-split.mod-right-split
+  .sidebar-toggle-button.mod-right {
+  position: fixed !important;
+  top: calc(var(--card-gap, 8px) + 2px) !important;
+  height: calc(var(--header-height, 40px) - 3px) !important;
+  transform: translate(-20px, 0) !important;
+  padding-top: 2px !important;
+  padding-bottom: 0 !important;
+}
+
+/* With right-sidebar auto-hide disabled, keep the toggle inside the
+   expanded sidebar card instead of using the auto-hide fixed position. */
+body.disable-hide-right-sidebar-tabs:not(.is-mobile)
+  .workspace-split.mod-right-split:not(.is-sidedock-collapsed)
+  .workspace-tab-header-container
+  .sidebar-toggle-button.mod-right {
+  position: absolute !important;
+  top: 50% !important;
+  right: 8px !important;
+  height: var(--header-height, 40px) !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  transform: translateY(-50%) !important;
+}
+
+/* COLLAPSED dock: core relocates the right toggle INTO the root tab
+   bar (see DOM: it lands as the last child of the center bar's
+   .workspace-tab-header-container, carrying its mod-right classes).
+   Key off that parent — the workspace state class is not dependable. */
+body:not(.disable-hide-right-sidebar-tabs)
+  .workspace-split.mod-root
+  .workspace-tab-header-container
+  > .sidebar-toggle-button.mod-secondary.mod-right {
+  position: absolute !important;
+  top: 50% !important;
+  right: 8px !important;
+  transform: translateY(-50%) !important;
+}
+
+/* Explorer Category Tabs integration */
+.octarine-tabs-container.octarine-auto-hide {
+  position: relative !important;
+  height: var(--collapsed-bar-size) !important;
+  min-height: var(--collapsed-bar-size) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  transition:
+    height var(--collapse-ease),
+    min-height var(--collapse-ease),
+    padding var(--collapse-ease) !important;
+}
+
+.octarine-tabs-container.octarine-auto-hide > * {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity var(--collapse-ease) !important;
+}
+
+.octarine-tabs-container.octarine-auto-hide::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--pill-width);
+  height: var(--pill-thickness);
+  background-color: var(--pill-color);
+  border-radius: 99px;
+  opacity: var(--pill-opacity);
+  transition:
+    opacity var(--collapse-ease),
+    width var(--collapse-ease);
+  pointer-events: none;
+}
+
+.octarine-tabs-container.octarine-auto-hide:is(:hover, :focus-within) {
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 4px 8px !important;
+  transition:
+    height var(--expand-ease),
+    min-height var(--expand-ease),
+    padding var(--expand-ease) !important;
+}
+
+.octarine-tabs-container.octarine-auto-hide:is(:hover, :focus-within) > * {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transition: opacity var(--expand-ease) !important;
+}
+
+.octarine-tabs-container.octarine-auto-hide:is(:hover, :focus-within)::after {
+  opacity: 0 !important;
+  transition: opacity var(--expand-ease) !important;
+}

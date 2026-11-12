@@ -1,0 +1,223 @@
+/* @settings
+name: Table Styling
+id: table-styling
+settings:
+    -
+        id: table-appearance-heading
+        title: Appearance
+        type: heading
+        level: 2
+    -
+        id: table-header-style
+        title: Header style
+        description: Use a soft accent tint, a solid accent header, or the theme's plain background.
+        type: class-select
+        allowEmpty: false
+        default: table-header-tint
+        options:
+            -
+                label: Accent tint
+                value: table-header-tint
+            -
+                label: Solid accent
+                value: table-header-solid
+            -
+                label: Plain
+                value: table-header-plain
+    -
+        id: table-header-background-off
+        title: Turn off header background
+        description: Makes the header background transparent, regardless of the selected header style.
+        type: class-toggle
+        default: false
+    -
+        id: table-lines-style
+        title: Table lines
+        description: Choose a full grid, horizontal separators only, or no cell lines.
+        type: class-select
+        allowEmpty: false
+        default: table-lines-horizontal
+        options:
+            -
+                label: Full grid
+                value: table-lines-grid
+            -
+                label: Horizontal only
+                value: table-lines-horizontal
+            -
+                label: No lines
+                value: table-lines-none
+    -
+        id: table-zebra-off
+        title: Turn off zebra striping
+        description: By default, alternating rows receive a subtle accent tint.
+        type: class-toggle
+        default: false
+    -
+        id: table-colors-heading
+        title: Colors
+        type: heading
+        level: 2
+    -
+        id: table-custom-accent-enabled
+        title: Use a custom table accent
+        description: Overrides the theme accent for table headers, stripes, and row hover.
+        type: class-toggle
+        default: false
+    -
+        id: table-custom-accent
+        title: Custom table accent
+        description: Used when the custom table accent is enabled.
+        type: variable-color
+        format: hex
+        default: '#6967e8'
+    -
+        id: table-stripe-strength
+        title: Stripe and hover strength
+        description: Intensity of the accent tint on alternating rows and hovered rows.
+        type: variable-number-slider
+        default: 10
+        min: 0
+        max: 24
+        step: 1
+        format: "%"
+    -
+        id: table-header-strength
+        title: Header tint strength
+        description: Intensity of the accent tint when Accent tint is selected.
+        type: variable-number-slider
+        default: 24
+        min: 0
+        max: 50
+        step: 1
+        format: "%"
+*/
+
+body {
+    --table-custom-accent: #6967e8;
+    --table-stripe-strength: 10%;
+    --table-header-strength: 24%;
+
+    --table-accent: var(--interactive-accent);
+    --table-border: var(--background-modifier-border);
+    --table-stripe: color-mix(
+        in srgb,
+        var(--table-accent) var(--table-stripe-strength),
+        var(--background-primary)
+    );
+    --table-header-tint: color-mix(
+        in srgb,
+        var(--table-accent) var(--table-header-strength),
+        var(--background-secondary)
+    );
+    --table-header-background: var(--table-header-tint);
+    --table-header-foreground: var(--text-normal);
+}
+
+body.table-custom-accent-enabled {
+    --table-accent: var(--table-custom-accent);
+}
+
+body.table-header-solid {
+    --table-header-background: var(--table-accent);
+    --table-header-foreground: var(--text-on-accent, #fff);
+}
+
+body.table-header-plain {
+    --table-header-background: var(--background-secondary);
+}
+
+body.table-header-background-off {
+    --table-header-background: transparent;
+}
+
+.markdown-rendered table,
+.cm-table-widget table {
+    border: 1px solid var(--table-border);
+    border-radius: 8px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.markdown-rendered table th,
+.markdown-rendered table td,
+.cm-table-widget table th,
+.cm-table-widget table td {
+    padding: 0.65em 0.85em;
+    border-right: 0;
+    border-bottom: 1px solid var(--table-border);
+    vertical-align: top;
+    transition: background-color 120ms ease;
+}
+
+.markdown-rendered table th,
+.cm-table-widget table.table-editor thead th,
+.cm-table-widget table.table-editor thead th[class] {
+    background-color: var(--table-header-background) !important;
+    color: var(--table-header-foreground) !important;
+    font-weight: 650;
+    text-align: left;
+}
+
+.markdown-rendered table thead th:first-child,
+.cm-table-widget table thead th:first-child {
+    border-top-left-radius: 7px;
+}
+
+.markdown-rendered table thead th:last-child,
+.cm-table-widget table thead th:last-child {
+    border-top-right-radius: 7px;
+}
+
+.markdown-rendered table tbody tr:last-child td:first-child,
+.cm-table-widget table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 7px;
+}
+
+.markdown-rendered table tbody tr:last-child td:last-child,
+.cm-table-widget table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 7px;
+}
+
+.markdown-rendered table tr > :last-child,
+.cm-table-widget table tr > :last-child {
+    border-right: 0;
+}
+
+.markdown-rendered table tbody tr:last-child > td,
+.cm-table-widget table tbody tr:last-child > td {
+    border-bottom: 0;
+}
+
+body:not(.table-zebra-off) .markdown-rendered table tbody tr:nth-child(even) > td,
+body:not(.table-zebra-off) .cm-table-widget table tbody tr:nth-child(even) > td {
+    background-color: var(--table-stripe) !important;
+}
+
+.markdown-rendered table tbody tr:hover > td,
+.cm-table-widget table tbody tr:hover > td {
+    background-color: color-mix(
+        in srgb,
+        var(--table-accent) var(--table-stripe-strength),
+        var(--background-modifier-hover)
+    );
+}
+
+body.table-lines-grid .markdown-rendered table th,
+body.table-lines-grid .markdown-rendered table td,
+body.table-lines-grid .cm-table-widget table th,
+body.table-lines-grid .cm-table-widget table td {
+    border-right: 1px solid var(--table-border);
+}
+
+body.table-lines-none .markdown-rendered table,
+body.table-lines-none .cm-table-widget table {
+    border-color: transparent;
+}
+
+body.table-lines-none .markdown-rendered table th,
+body.table-lines-none .markdown-rendered table td,
+body.table-lines-none .cm-table-widget table th,
+body.table-lines-none .cm-table-widget table td {
+    border-color: transparent;
+}
