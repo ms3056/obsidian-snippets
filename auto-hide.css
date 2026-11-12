@@ -1271,3 +1271,5 @@ body:not(.disable-hide-right-sidebar-tabs)
   opacity: 0 !important;
   transition: opacity var(--expand-ease) !important;
 }
+
+/* v1.3.0-sync-test: content marker added 2026-11-12 */
