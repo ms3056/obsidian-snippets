@@ -38,11 +38,22 @@ settings:
         description: Removes the subtle outline and drop shadow around images.
         type: class-toggle
         default: false
+    -
+        id: image-captions-heading
+        title: Captions (Image Studio)
+        type: heading
+        level: 2
+    -
+        id: image-caption-off
+        title: Disable caption styling
+        description: Stops centering and styling Image Studio captions below images.
+        type: class-toggle
+        default: false
 */
 
 /* ============================================================================
    Image Styling — Live Preview & Reading View
-   Centered images, rounded corners, and subtle framing.
+   Centered images, rounded corners, subtle framing, and Image Studio captions.
    ============================================================================ */
 
 body {
@@ -80,7 +91,8 @@ body:not(.image-center-off) .markdown-preview-sizer p > img:not(.emoji, .link-fa
   object-fit: contain;
 }
 
-:is(.is-live-preview .cm-content, .markdown-preview-sizer) .image-embed > :is(.image-wrapper, .image-resize-container) {
+:is(.is-live-preview .cm-content, .markdown-preview-sizer) .image-embed > :is(.image-wrapper, .image-resize-container),
+.iek-layer .iek-ghost {
   border-radius: var(--image-radius, 10px);
 }
 
@@ -92,4 +104,19 @@ body:not(.image-border-off) :is(.is-live-preview .cm-content, .markdown-preview-
   outline: 1px solid var(--background-modifier-border);
   outline-offset: -1px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16);
+}
+
+/* 3. Image Studio captions (*caption* <!--iek-caption-->) */
+body:not(.image-caption-off) .is-live-preview .cm-content .cm-line:has(.cm-em):has(.cm-comment) {
+  text-align: center;
+  font-size: 0.9em;
+  color: var(--text-muted);
+  padding-top: 2px;
+}
+
+body:not(.image-caption-off) .markdown-preview-sizer .el-p:has(.image-embed) + .el-p > p:has(> em):not(:has(:not(em))) {
+  text-align: center;
+  font-size: 0.9em;
+  color: var(--text-muted);
+  margin-top: -0.4em;
 }
