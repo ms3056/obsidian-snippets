@@ -114,6 +114,11 @@ body:not(.image-caption-off) .is-live-preview .cm-content .cm-line:has(.cm-em):h
   padding-top: 2px;
 }
 
+/* Hide the <!--iek-caption--> HTML comment marker in Live Preview unless editing that line */
+body:not(.image-caption-off) .is-live-preview .cm-content .cm-line:not(.cm-active):has(.cm-em):has(.cm-comment) .cm-comment {
+  display: none;
+}
+
 body:not(.image-caption-off) .markdown-preview-sizer .el-p:has(.image-embed) + .el-p > p:has(> em):not(:has(:not(em))) {
   text-align: center;
   font-size: 0.9em;
