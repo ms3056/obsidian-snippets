@@ -106,22 +106,16 @@ body:not(.image-border-off) :is(.is-live-preview .cm-content, .markdown-preview-
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16);
 }
 
-/* 3. Image Studio captions (*caption* <!--iek-caption-->) */
-body:not(.image-caption-off) .is-live-preview .cm-content .cm-line:has(.cm-em):has(.cm-comment) {
+/* 3. Image Studio captions (<span class="caption">...</span>) */
+body:not(.image-caption-off) .caption {
+  display: block;
   text-align: center;
   font-size: 0.9em;
+  font-style: italic;
   color: var(--text-muted);
-  padding-top: 2px;
+  margin-top: -0.25em;
 }
 
-/* Hide the <!--iek-caption--> HTML comment marker in Live Preview unless editing that line */
-body:not(.image-caption-off) .is-live-preview .cm-content .cm-line:not(.cm-active):has(.cm-em):has(.cm-comment) .cm-comment {
+body:not(.image-caption-off) .caption.caption-hidden {
   display: none;
-}
-
-body:not(.image-caption-off) .markdown-preview-sizer .el-p:has(.image-embed) + .el-p > p:has(> em):not(:has(:not(em))) {
-  text-align: center;
-  font-size: 0.9em;
-  color: var(--text-muted);
-  margin-top: -0.4em;
 }
