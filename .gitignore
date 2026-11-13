@@ -1,2 +1,7 @@
 .DS_Store
 archive/
+# Local-only daily note styling — intentionally NEVER published.
+# Kept out of git so `git add -A` cannot stage it; lives in each
+# vault's own .obsidian/snippets/ folder (private by construction).
+daily.css
+

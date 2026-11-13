@@ -1,8 +1,11 @@
 /* ==========================================================
    ACCENT STYLES — accent-derived text & element styling
    v1.1.0-sync-test: content marker added 2026-11-12
-   Consolidated from four snippets (originals in snippets/_archive):
-     title-style.css, Bold and Italic.css, Horizontal Line.css, daily.css
+   Consolidated from three snippets (originals in snippets/_archive):
+     title-style.css, Bold and Italic.css, Horizontal Line.css
+   (The former daily.css block — blockquotes, timeblocks, BLUF —
+    moved OUT to a local-only `daily.css` on 2026-11-13; that file
+    is deliberately NOT in this repo.)
    All colors derive from --accent-h / --accent-s / --accent-l, so they
    follow Color Cycler (or a ui-colors scheme accent, when enabled).
    ========================================================== */
@@ -157,90 +160,4 @@ strong {
     /* Position the symbol at 50% of the parent's width */
     transform: translate(-50%, calc(var(--hr-thickness) / -2));
     /* Adjust translation to center the symbol exactly */
-}
-
-/* ---------- Daily notes: blockquotes & timeblocks, cssclass `daily` (was daily.css) ---------- */
-
-.markdown-preview-view.daily blockquote,
-.markdown-source-view.daily .cm-line.HyperMD-quote,
-.markdown-source-view.daily .cm-line.HyperMD-quote .cm-quote {
-  --blockquote-border-color: transparent;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* Bold any timeblock wrapper (and any inner CodeMirror/Harper spans) on .daily notes */
-.markdown-preview-view.daily :is(.timeblock, timeblock, .timeblock *, timeblock *),
-.markdown-source-view.daily :is(.timeblock, timeblock, .timeblock *, timeblock *) {
-  font-weight: 700 !important;
-  font-variation-settings: "wght" 700 !important;
-  color: var(--text-accent) !important;
-}
-
-.markdown-preview-view.daily blockquote,
-.markdown-source-view.daily .cm-line.HyperMD-quote {
-  background-color: hsl(
-    calc(var(--accent-h) + 0)
-    calc(var(--accent-s) * 1)
-    calc(var(--accent-l) * .8)
-    / 0.08
-  );
-  font-size: 95%;
-  hyphens: auto;
-  word-break: keep-all;
-  color: var(--text-muted);
-  line-height: 1.3;
-  padding: 1px 2%;
-}
-
-/* Reading view: single blockquote container gets all 4 corners rounded */
-.markdown-preview-view.daily blockquote {
-  border-radius: 8px;
-  padding: 6px 2%;
-  margin-top: 15pt;
-  margin-bottom: 15pt;
-}
-
-/* Live Preview: round the top corners on the first quote line and bottom corners on the last quote line */
-.markdown-source-view.daily .cm-line.HyperMD-quote:first-child,
-.markdown-source-view.daily .cm-line:not(.HyperMD-quote) + .cm-line.HyperMD-quote {
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  padding-top: 6px;
-  margin-top: 15pt;
-}
-
-.markdown-source-view.daily .cm-line.HyperMD-quote:not(:has(+ .cm-line.HyperMD-quote)) {
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-  padding-bottom: 6px;
-  margin-bottom: 15pt;
-}
-
-
-/* BLUF text on daily notes: accent gradient, 10% lighter -> 10% darker, left to right.
-   The gradient is painted on the wrapper and clipped to the text; inner spans
-   (Live Preview / Harper) get a transparent fill so they show the wrapper's
-   gradient instead of restarting their own. */
-.daily :is(.bluf, bluf) {
-  font-weight: 700;
-  font-variation-settings: "wght" 700;
-  background-image: linear-gradient(
-    to right,
-    hsl(var(--accent-h) var(--accent-s) min(100%, calc(var(--accent-l) + 10%))),
-    hsl(var(--accent-h) var(--accent-s) max(0%, calc(var(--accent-l) - 10%)))
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  /* Each wrapped line gets the full gradient instead of one long stretched band */
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-}
-
-.daily :is(.bluf, bluf) * {
-  -webkit-text-fill-color: transparent !important;
-  color: transparent !important;
-  background: none !important;
 }
