@@ -1,6 +1,6 @@
 {
   "name": "HiroMike Obsidian Snippets",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "CSS snippets for the main and Writing vaults. Installed and updated by Snippet Sync.",
   "snippets": [
     {
@@ -32,6 +32,11 @@
       "id": "hide-scrollbars",
       "file": "hide-scrollbars.css",
       "description": "Hide scrollbars for a cleaner UI"
+    },
+    {
+      "id": "image-styling",
+      "file": "image-styling.css",
+      "description": "Centered images, rounded corners, and click-to-zoom in Live Preview and Reading View"
     },
     {
       "id": "rainbow-headings",

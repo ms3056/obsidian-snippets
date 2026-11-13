@@ -1,0 +1,154 @@
+/* @settings
+name: Image Styling
+id: image-styling
+settings:
+    -
+        id: image-layout-heading
+        title: Layout & Appearance
+        type: heading
+        level: 2
+    -
+        id: image-center-off
+        title: Disable image centering
+        description: By default, images in Live Preview and Reading View are centered.
+        type: class-toggle
+        default: false
+    -
+        id: image-radius
+        title: Image corner radius
+        type: variable-number-slider
+        default: 10
+        min: 0
+        max: 24
+        step: 1
+        format: px
+    -
+        id: image-max-height
+        title: Max image height
+        description: Caps tall images to a percentage of the viewport height.
+        type: variable-number-slider
+        default: 75
+        min: 30
+        max: 100
+        step: 5
+        format: vh
+    -
+        id: image-border-off
+        title: Disable subtle border & shadow
+        description: Removes the subtle outline and drop shadow around images.
+        type: class-toggle
+        default: false
+    -
+        id: image-zoom-heading
+        title: Interaction
+        type: heading
+        level: 2
+    -
+        id: image-zoom-off
+        title: Disable click-to-zoom
+        description: Disables the Minimal-style press-and-hold zoom overlay on images.
+        type: class-toggle
+        default: false
+*/
+
+/* ============================================================================
+   Image Styling — Live Preview & Reading View
+   Centered images, rounded corners, subtle framing, and click-to-zoom view.
+   ============================================================================ */
+
+body {
+  --image-radius: 10px;
+  --image-max-height: 75vh;
+}
+
+/* 1. Center images in Live Preview and Reading View */
+body:not(.image-center-off) :is(.is-live-preview .cm-content, .markdown-preview-sizer) .image-embed {
+  display: flex;
+  justify-content: center;
+  margin-inline: auto;
+}
+
+body:not(.image-center-off) :is(.is-live-preview .cm-content, .markdown-preview-sizer) .image-embed > :is(.image-wrapper, .image-resize-container) {
+  display: flex;
+  justify-content: center;
+  margin-inline: auto;
+}
+
+body:not(.image-center-off) .is-live-preview .cm-line > img:not(.emoji, .link-favicon, .highlight-swatch, [alt="banner"]),
+body:not(.image-center-off) .markdown-preview-sizer p > img:not(.emoji, .link-favicon, .highlight-swatch, [alt="banner"]) {
+  display: block;
+  margin-inline: auto;
+}
+
+/* 2. Rounded corners, sizing, and subtle framing */
+:is(.is-live-preview .cm-content, .markdown-preview-sizer) :is(
+  .image-embed img,
+  .cm-line > img,
+  p > img
+):not(.emoji, .link-favicon, .highlight-swatch, [alt="banner"]) {
+  border-radius: var(--image-radius, 10px);
+  max-height: var(--image-max-height, 75vh);
+  object-fit: contain;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+:is(.is-live-preview .cm-content, .markdown-preview-sizer) .image-embed > :is(.image-wrapper, .image-resize-container) {
+  border-radius: var(--image-radius, 10px);
+}
+
+body:not(.image-border-off) :is(.is-live-preview .cm-content, .markdown-preview-sizer) :is(
+  .image-embed img,
+  .cm-line > img,
+  p > img
+):not(.emoji, .link-favicon, .highlight-swatch, [alt="banner"]) {
+  outline: 1px solid var(--background-modifier-border);
+  outline-offset: -1px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16);
+}
+
+/* 3. Click-to-zoom (press and hold) */
+body:not(.image-zoom-off) :is(.is-live-preview .cm-content, .markdown-preview-sizer) :is(
+  .image-embed img,
+  .cm-line > img,
+  p > img
+):not(.emoji, .link-favicon, .highlight-swatch, [alt="banner"]):hover {
+  cursor: zoom-in;
+}
+
+body:not(.image-zoom-off) :is(.is-live-preview .cm-content, .markdown-preview-sizer) :is(
+  .image-embed img,
+  .cm-line > img,
+  p > img
+):not(.emoji, .link-favicon, .highlight-swatch, [alt="banner"]):active {
+  cursor: zoom-out;
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: auto !important;
+  height: auto !important;
+  max-width: 92vw !important;
+  max-height: 92vh !important;
+  object-fit: contain;
+  border-radius: var(--image-radius, 10px);
+  outline: 1px solid var(--background-modifier-border);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55), 0 0 0 100vmax rgba(0, 0, 0, 0.78);
+  z-index: var(--layer-modal, 9999);
+  animation: ss-image-zoom-in 140ms ease-out;
+}
+
+body:not(.image-zoom-off) :is(.image-embed, .image-wrapper, .image-resize-container):has(img:active) {
+  overflow: visible !important;
+  contain: none !important;
+  z-index: var(--layer-modal, 9999);
+}
+
+@keyframes ss-image-zoom-in {
+  from {
+    opacity: 0.85;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
