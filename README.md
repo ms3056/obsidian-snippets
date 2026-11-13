@@ -14,7 +14,7 @@ Custom CSS snippets for Michael's Obsidian vaults (main vault `/Users/hiromike/D
 | `card_layout.css` | Card-style note layouts |
 | `compact-tasks.css` | Compact Tasks plugin rendering |
 | `hide-scrollbars.css` | Hide scrollbars for a cleaner UI |
-| `image-styling.css` | Centered images, rounded corners, and click-to-zoom in Live Preview and Reading View |
+| `image-styling.css` | Centered images, rounded corners, and subtle framing in Live Preview and Reading View |
 | `rainbow-headings.css` | Rainbow-colored headings |
 | `sidebar-tabs.css` | Sidebar tab styling |
 | `table-styling.css` | Table styling improvements |
