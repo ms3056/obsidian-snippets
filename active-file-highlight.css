@@ -88,6 +88,15 @@ settings:
         step: 1
         format: px
     -
+        id: gutter-line-height
+        title: Gutter Line Height
+        description: Height of the vertical accent line as a percentage of the active line. 100 is the original full-line height, lower values make it shorter. Minimum 3px so it still reads as a line. Only applies while the Accent Line marker is selected.
+        type: variable-number-slider
+        default: 100
+        min: 15
+        max: 100
+        step: 5
+    -
         id: gutter-dot-size
         title: Gutter Dot Size
         description: Diameter of the accent dot in the gutter. Only applies while the Accent Dot marker is selected.
@@ -107,6 +116,8 @@ body {
     --active-line-custom-color: #7c3aed;
     --active-line-radius: 4px;
     --gutter-line-width: 3px;
+    /* Unitless percentage of the active line height; 100 = original full-line look */
+    --gutter-line-height: 100;
     --gutter-dot-size: 6px;
 
     /* Base color derived from vault accent color */
@@ -161,8 +172,9 @@ body.gutter-marker-line .cm-line.cm-active::before {
     content: "";
     position: absolute;
     left: calc(-12px - (var(--gutter-line-width) / 2));
-    top: -1px;
-    bottom: -1px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: clamp(3px, calc(var(--gutter-line-height) * 1%), calc(100% + 2px)) !important;
     width: var(--gutter-line-width) !important;
     background-color: var(--active-line-base-color) !important;
     border-radius: 99px;
