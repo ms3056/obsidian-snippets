@@ -339,7 +339,7 @@
   opacity: 1;
 }
 .tasklist li.plugin-tasks-list-item[data-task="x"] .qc-edit-btn {
-  opacity: 0.45 !important;
+  display: none !important;
 }
 .tasklist li.plugin-tasks-list-item[data-task="x"] .qc-edit-btn:hover {
   opacity: 0.7 !important;
