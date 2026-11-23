@@ -202,6 +202,132 @@
 .tasklist .tasks-edit,
 .tasklist .tasks-postpone,
 .tasklist a.tasks-edit,
-.tasklist .tasks-backlink {
+.tasklist a.tasks-backlink {
   /* display: none !important; */
+}
+
+/* 12. Strict two-line grid for Tasks query rows in the tasklist note.
+   Row 1: checkbox | title (+ dates/buttons) | action icons
+   Row 2: (same checkbox) | description ................ tags  */
+.tasklist li.plugin-tasks-list-item {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "check main extras"
+    "check detail detail";
+  align-items: center !important;
+  gap: 2px 6px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+.tasklist li.plugin-tasks-list-item > input.task-list-item-checkbox {
+  grid-area: check;
+  align-self: start;
+  margin-top: 2px !important;
+}
+.tasklist li.plugin-tasks-list-item > .tasks-list-text {
+  grid-area: main;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+.tasklist li.plugin-tasks-list-item > .tasks-list-text > .task-description {
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+.tasklist li.plugin-tasks-list-item > .tasks-list-text > span:not(.task-description) {
+  flex: 0 0 auto !important;
+}
+.tasklist li.plugin-tasks-list-item .task-extras {
+  grid-area: extras;
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+}
+.tasklist .qc-detail-row {
+  grid-area: detail;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+.tasklist .qc-task-detail {
+  flex: 1 1 auto !important;
+  min-width: 0;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  font-size: 0.85em;
+  font-style: italic;
+  line-height: 1.25;
+  color: var(--text-muted);
+  opacity: 0.85;
+}
+.tasklist .qc-detail-row .tag,
+.tasklist .qc-detail-row a.tag {
+  flex: 0 0 auto !important;
+  margin-left: auto !important;
+  white-space: nowrap !important;
+}
+
+/* Reading Mode: keep the same strict 2-line grid as Live Preview. */
+.tasklist.markdown-preview-view li.plugin-tasks-list-item,
+.markdown-preview-view.tasklist li.plugin-tasks-list-item {
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "check main extras"
+    "check detail detail";
+}
+
+/* 13. Postpone and Quick Capture edit icons share one line-1 box model */
+.tasklist li.plugin-tasks-list-item .tasks-postpone,
+.tasklist li.plugin-tasks-list-item .qc-edit-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: center !important;
+  width: 18px !important;
+  height: 18px !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  margin-left: 4px !important;
+  vertical-align: middle !important;
+  transform: none !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.tasklist li.plugin-tasks-list-item .tasks-postpone svg,
+.tasklist li.plugin-tasks-list-item .qc-edit-btn svg {
+  display: block !important;
+  margin: 0 !important;
+  margin-top: 0 !important;
+  transform: none !important;
+}
+.tasklist li.plugin-tasks-list-item .qc-edit-btn {
+  grid-area: extras;
+  color: color-mix(in srgb, var(--color-yellow, #e5c07b) 70%, var(--text-muted)) !important;
+  opacity: 0.78;
+}
+.tasklist li.plugin-tasks-list-item .qc-edit-btn:hover {
+  opacity: 1;
+}
+.tasklist li.plugin-tasks-list-item[data-task="x"] .qc-edit-btn {
+  opacity: 0.45 !important;
+}
+.tasklist li.plugin-tasks-list-item[data-task="x"] .qc-edit-btn:hover {
+  opacity: 0.7 !important;
 }
