@@ -344,3 +344,24 @@
 .tasklist li.plugin-tasks-list-item[data-task="x"] .qc-edit-btn:hover {
   opacity: 0.7 !important;
 }
+
+/* 14. Completed tasks: strictly one line, tags at the far right of row 1 */
+.tasklist li.plugin-tasks-list-item[data-task="x"] {
+  grid-template-rows: auto !important;
+  grid-template-areas: "check main extras detail" !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+}
+.tasklist li.plugin-tasks-list-item[data-task="x"] .qc-task-detail {
+  display: none !important;
+}
+.tasklist li.plugin-tasks-list-item[data-task="x"] .qc-action-slot {
+  display: none !important;
+}
+.tasklist li.plugin-tasks-list-item[data-task="x"] .qc-detail-row {
+  margin-top: 0 !important;
+  align-self: center !important;
+}
+.tasklist li.plugin-tasks-list-item[data-task="x"] .qc-detail-row .tag {
+  margin-left: auto !important;
+}
