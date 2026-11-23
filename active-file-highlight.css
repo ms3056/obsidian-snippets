@@ -167,14 +167,20 @@ body.enable-line-bg.active-line-full-width .cm-line.cm-active {
     position: relative;
 }
 
-/* Option A: Vertical Line in Gutter */
-body.gutter-marker-line .cm-line.cm-active::before {
+/* Option A: Vertical Line in Gutter
+   Uses ::after on purpose: themes (Border/Baseline) own ::before on quote
+   lines for the blockquote border, so drawing there broke their layout.
+   --line-top-inset handles header padding; --gutter-inset handles lines that
+   themes indent from the real gutter. */
+body.gutter-marker-line .cm-line.cm-active::after {
+    --line-top-inset: 0px;
+    --gutter-inset: 0px;
     content: "";
     position: absolute;
-    left: calc(-12px - (var(--gutter-line-width) / 2));
-    top: 50%;
+    left: calc(-12px - (var(--gutter-line-width) / 2) - var(--gutter-inset));
+    top: calc(50% + (var(--line-top-inset) / 2));
+    height: clamp(3px, calc((100% - var(--line-top-inset)) * 0.01 * var(--gutter-line-height)), calc(100% - var(--line-top-inset) + 2px)) !important;
     transform: translateY(-50%);
-    height: clamp(3px, calc(var(--gutter-line-height) * 1%), calc(100% + 2px)) !important;
     width: var(--gutter-line-width) !important;
     background-color: var(--active-line-base-color) !important;
     border-radius: 99px;
@@ -182,8 +188,24 @@ body.gutter-marker-line .cm-line.cm-active::before {
     z-index: 5;
 }
 
+/* Headers: Obsidian adds --p-spacing above the text.
+   Blockquotes and callouts: themes indent the line away from the gutter, so
+   shift the marker left by that indentation. No vertical shift here — the
+   theme's blockquote border lives in ::before and must stay untouched. */
+body.gutter-marker-line .cm-line.cm-active.HyperMD-header::after {
+    --line-top-inset: var(--p-spacing, 0px);
+}
+
+body.gutter-marker-line .cm-line.cm-active.HyperMD-quote::after {
+    --gutter-inset: var(--blockquote-padding, 0px);
+}
+
+body.gutter-marker-line .cm-callout .cm-line.cm-active::after {
+    --gutter-inset: var(--callout-padding-left, 16px);
+}
+
 /* Option B: Accent Dot in Gutter */
-body.gutter-marker-dot .cm-line.cm-active::before {
+body.gutter-marker-dot .cm-line.cm-active::after {
     content: "";
     position: absolute;
     left: calc(-12px - (var(--gutter-dot-size) / 2));
@@ -198,7 +220,8 @@ body.gutter-marker-dot .cm-line.cm-active::before {
 }
 
 /* Fallback / Option None */
-body.gutter-marker-none .cm-line.cm-active::before {
+body.gutter-marker-none .cm-line.cm-active::before,
+body.gutter-marker-none .cm-line.cm-active::after {
     content: none !important;
     display: none !important;
 }
