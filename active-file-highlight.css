@@ -170,8 +170,9 @@ body.enable-line-bg.active-line-full-width .cm-line.cm-active {
 /* Option A: Vertical Line in Gutter
    Uses ::after on purpose: themes (Border/Baseline) own ::before on quote
    lines for the blockquote border, so drawing there broke their layout.
-   --line-top-inset handles header padding; --gutter-inset handles lines that
-   themes indent from the real gutter. */
+   --gutter-inset handles lines that themes indent from the real gutter.
+   Vertical centering uses top:50% of the line's padding box, which works for
+   headers, plain text and wrapped blockquotes alike. */
 body.gutter-marker-line .cm-line.cm-active::after {
     --line-top-inset: 0px;
     --gutter-inset: 0px;
@@ -179,7 +180,7 @@ body.gutter-marker-line .cm-line.cm-active::after {
     position: absolute;
     left: calc(-12px - (var(--gutter-line-width) / 2) - var(--gutter-inset));
     top: calc(50% + (var(--line-top-inset) / 2));
-    height: clamp(3px, calc((100% - var(--line-top-inset)) * 0.01 * var(--gutter-line-height)), calc(100% - var(--line-top-inset) + 2px)) !important;
+    height: clamp(3px, calc((100% - var(--line-top-inset)) * 0.01 * var(--gutter-line-height)), calc(100% + 2px)) !important;
     transform: translateY(-50%);
     width: var(--gutter-line-width) !important;
     background-color: var(--active-line-base-color) !important;
@@ -188,14 +189,18 @@ body.gutter-marker-line .cm-line.cm-active::after {
     z-index: 5;
 }
 
-/* Headers: Obsidian adds --p-spacing above the text.
-   Blockquotes and callouts: themes indent the line away from the gutter, so
-   shift the marker left by that indentation. No vertical shift here — the
-   theme's blockquote border lives in ::before and must stay untouched. */
-body.gutter-marker-line .cm-line.cm-active.HyperMD-header::after {
-    --line-top-inset: var(--p-spacing, 0px);
+/* H3-H6 sit lower and render shorter than H1/H2 (larger em boxes / theme
+   heading indicators). Nudge them up and give the line back some length.
+   The clamp max above is fixed at the original full-line height, so this
+   cannot make the marker taller than it was before the height slider. */
+body.gutter-marker-line .cm-line.cm-active:is(.HyperMD-header-3, .HyperMD-header-4, .HyperMD-header-5, .HyperMD-header-6)::after {
+    --line-top-inset: -8px;
 }
 
+/* Blockquotes and callouts: themes indent the line away from the gutter, so
+   shift the marker left by that indentation. Headers need NO vertical shift:
+   top:50% of the line's padding box already centers the text on header lines.
+   The theme's blockquote border lives in ::before and must stay untouched. */
 body.gutter-marker-line .cm-line.cm-active.HyperMD-quote::after {
     --gutter-inset: var(--blockquote-padding, 0px);
 }
