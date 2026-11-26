@@ -123,7 +123,7 @@ settings:
 */
 
 body {
-  --octarine-auto-hide-snippet-active: 1;
+  --ect-auto-hide-snippet-active: 1;
   --pill-width: 38px;
   --pill-thickness: 4px;
   --collapsed-bar-size: 16px;
@@ -1216,7 +1216,7 @@ body:not(.disable-hide-right-sidebar-tabs)
 }
 
 /* Explorer Category Tabs integration */
-.octarine-tabs-container.octarine-auto-hide {
+.ect-tabs-container.ect-auto-hide {
   position: relative !important;
   height: var(--collapsed-bar-size) !important;
   min-height: var(--collapsed-bar-size) !important;
@@ -1228,13 +1228,13 @@ body:not(.disable-hide-right-sidebar-tabs)
     padding var(--collapse-ease) !important;
 }
 
-.octarine-tabs-container.octarine-auto-hide > * {
+.ect-tabs-container.ect-auto-hide > * {
   opacity: 0 !important;
   pointer-events: none !important;
   transition: opacity var(--collapse-ease) !important;
 }
 
-.octarine-tabs-container.octarine-auto-hide::after {
+.ect-tabs-container.ect-auto-hide::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -1251,7 +1251,7 @@ body:not(.disable-hide-right-sidebar-tabs)
   pointer-events: none;
 }
 
-.octarine-tabs-container.octarine-auto-hide:is(:hover, :focus-within) {
+.ect-tabs-container.ect-auto-hide:is(:hover, :focus-within) {
   height: 40px !important;
   min-height: 40px !important;
   padding: 4px 8px !important;
@@ -1261,13 +1261,13 @@ body:not(.disable-hide-right-sidebar-tabs)
     padding var(--expand-ease) !important;
 }
 
-.octarine-tabs-container.octarine-auto-hide:is(:hover, :focus-within) > * {
+.ect-tabs-container.ect-auto-hide:is(:hover, :focus-within) > * {
   opacity: 1 !important;
   pointer-events: auto !important;
   transition: opacity var(--expand-ease) !important;
 }
 
-.octarine-tabs-container.octarine-auto-hide:is(:hover, :focus-within)::after {
+.ect-tabs-container.ect-auto-hide:is(:hover, :focus-within)::after {
   opacity: 0 !important;
   transition: opacity var(--expand-ease) !important;
 }
